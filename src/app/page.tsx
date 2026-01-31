@@ -1,10 +1,16 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
+      {/* 테마 토글 버튼 */}
+      <div className="fixed right-4 top-4 z-50">
+        <ThemeToggle />
+      </div>
+
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-16">
         <div className="max-w-2xl text-center">
           <h1 className="mb-4 text-5xl font-bold tracking-tight">
