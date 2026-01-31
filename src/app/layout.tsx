@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js v15 Starter Kit",
-  description: "A starter kit with Next.js v15, TypeScript, Tailwind CSS v4, and shadcn/ui",
+  title: "샐리랑 - Notion 기반 PT 운동 기록 서비스",
+  description: "코치는 Notion에서 작성만, 회원은 링크 클릭 한 번으로 운동 기록 확인",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
