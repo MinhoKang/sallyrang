@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // React Compiler는 Next.js 16에서 babel 설정을 통해 활성화됩니다.
-  // 참고: https://nextjs.org/docs/app/building-your-application/configuring/babel
+  // React Compiler 활성화 (자동 메모이제이션)
+  reactCompiler: true,
 };
 
 export default nextConfig;
