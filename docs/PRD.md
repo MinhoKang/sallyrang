@@ -89,13 +89,16 @@
   - 우측: 여백 (균형)
 - **콘텐츠 영역:**
   - 수업 제목 (H1, 큰 텍스트)
-  - Notion Block 렌더링 영역:
+  - Notion Block 렌더링 영역 (MVP):
     - 텍스트 (일반, 강조)
     - 제목 (H2, H3)
-    - 리스트 (순서 없음, 순서 있음)
-    - 이미지 (최적화된 크기로 표시)
-    - 토글 블록 (접기/펼치기)
-    - 코드 블록
+    - 이미지 (Next.js Image 컴포넌트로 최적화)
+
+**지연 구현 (Phase 2):**
+- 리스트 (순서 없음, 순서 있음)
+- 토글 블록 (접기/펼치기)
+- 코드 블록
+- Callout
 
 **기능:**
 - 뒤로가기 버튼 클릭 → 회원 대시보드로 복귀
@@ -172,6 +175,7 @@
 - **Package Manager:** npm/yarn
 - **Linting:** ESLint (프로젝트 설정 따름)
 - **Form Handling:** react-hook-form + zod (필요시)
+- **필수 설치:** `@notionhq/client` (Notion API SDK)
 
 ---
 
@@ -192,27 +196,27 @@
   - `SessionDetailHeader`: 수업 상세 헤더
   - `NotionBlockRenderer`: Notion 블록 렌더링
 
-### 6.2 SoC (Separation of Concerns) & Hooks
+### 6.2 SoC (Separation of Concerns) & Server Components
 
-**View와 Logic의 분리**
-- 컴포넌트: 오직 렌더링만 담당
-- 데이터 페칭, 가공은 Custom Hook으로 분리
+**Next.js App Router 기반 설계**
+- **Server Components (기본)**: 데이터 페칭과 렌더링을 한 곳에서 처리
+- **Client Components (필요시만)**: 인터랙티브 UI만 `'use client'` 사용
 
-**Custom Hooks**
-- `useMember(id)`:
-  - 회원 정보 조회 (Notion Members DB)
+**Server Components 적용**
+- `app/members/[id]/page.tsx`: 회원 정보 직접 fetch
+  - Notion Members DB에서 회원 정보 조회
   - D-Day 계산
-  - 반환: { name, age, experience, location, status, dday, ... }
+  - 수업 리스트 페칭
 
-- `useSessions(memberId)`:
-  - 회원의 수업 리스트 조회 (Notion Sessions DB)
-  - 날짜순 정렬
-  - 반환: { sessions: [...], isLoading, error }
+- `app/members/[id]/sessions/[sessionId]/page.tsx`: 수업 상세 정보 직접 fetch
+  - Notion Sessions DB에서 특정 수업 조회
+  - Notion 블록 파싱 및 렌더링
+  - 메타데이터(제목, 날짜, 피드백) 처리
 
-- `useSessionDetail(sessionId)`:
-  - 특정 수업의 상세 정보 조회
-  - Notion 블록 파싱
-  - 반환: { title, date, blocks, feedback, ... }
+**Notion API 호출 패턴**
+- 모든 Notion API 호출은 서버에서 async/await로 처리
+- 클라이언트로 데이터 전달 전에 데이터 변환 완료
+- Client Components: 상태 관리가 필요한 UI만 사용 (예: 모달, 토글)
 
 ### 6.3 공통 유틸리티 (Utils)
 
@@ -237,17 +241,21 @@ src/
 │   ├── page.tsx (홈)
 │   └── members/
 │       └── [id]/
-│           ├── page.tsx (대시보드)
+│           ├── page.tsx (대시보드 - Server Component)
+│           ├── error.tsx (에러 바운더리)
+│           ├── loading.tsx (로딩 상태)
 │           └── sessions/
 │               └── [sessionId]/
-│                   └── page.tsx (상세)
+│                   ├── page.tsx (상세 - Server Component)
+│                   ├── error.tsx (에러 바운더리)
+│                   └── loading.tsx (로딩 상태)
 ├── components/
 │   ├── ui/ (shadcn/ui 컴포넌트)
 │   └── domain/ (비즈니스 컴포넌트)
-├── hooks/
-│   ├── useMember.ts
-│   ├── useSessions.ts
-│   └── useSessionDetail.ts
+│       ├── MemberProfileCard.tsx
+│       ├── SessionHistoryList.tsx
+│       ├── SessionDetailHeader.tsx
+│       └── NotionBlockRenderer.tsx
 ├── lib/
 │   ├── notion.ts (Notion API 설정)
 │   ├── formatters.ts (포맷팅 함수)
@@ -370,37 +378,46 @@ function calculateDDay(startDate: Date): string {
 
 ## 9. MVP 개발 단계
 
-### Phase 1: 환경 설정 (1일)
-- [ ] React Compiler 활성화 (`next.config.js`)
-- [ ] Notion API Key 발급 및 `.env.local` 설정
-- [ ] Tailwind CSS & shadcn/ui 초기 세팅
+### Phase 1: 환경 설정 (1-2일)
+- [ ] React Compiler 활성화 (`next.config.ts`에 `experimental.reactCompiler: true` 추가)
+- [ ] `@notionhq/client` 설치 (`npm install @notionhq/client`)
+- [ ] Notion API Key 발급 및 `.env.local` 설정:
+  ```
+  NOTION_API_KEY=secret_xxxxxxxxxxxxx
+  NOTION_MEMBERS_DB_ID=xxxxxxxxxxxxx
+  NOTION_SESSIONS_DB_ID=xxxxxxxxxxxxx
+  ```
+- [ ] Tailwind CSS & shadcn/ui 초기 세팅 (이미 설치됨)
 - [ ] TypeScript strict 모드 확인
 
-### Phase 2: 데이터 로직 구현 (2-3일)
-- [ ] `lib/notion.ts`: Notion Client 설정
-- [ ] `hooks/useMember.ts`: 회원 정보 조회 로직
-- [ ] `hooks/useSessions.ts`: 수업 리스트 조회 로직
-- [ ] `hooks/useSessionDetail.ts`: 수업 상세 조회 로직
+### Phase 2: 데이터 로직 구현 (3-4일)
+- [ ] `lib/notion.ts`: Notion Client 설정 및 API 함수 작성
+- [ ] `app/members/[id]/page.tsx`: 회원 정보 Server Component로 구현
+  - 회원 정보 fetch
+  - 수업 리스트 fetch 및 정렬
+- [ ] `app/members/[id]/sessions/[sessionId]/page.tsx`: 수업 상세 Server Component로 구현
+  - 수업 정보 fetch
+  - Notion 블록 파싱
 - [ ] `lib/formatters.ts`: 날짜 포맷팅, D-Day 계산
+- [ ] `components/domain/NotionBlockRenderer.tsx`: Notion 블록 렌더링 컴포넌트
 
-### Phase 3: UI 구현 (3-4일)
-- [ ] 기본 shadcn/ui 컴포넌트 세팅 (Button, Card, Badge 등)
+### Phase 3: UI 구현 (2-3일)
+- [ ] 필수 shadcn/ui 컴포넌트 (Button, Card, Badge)
 - [ ] Domain 컴포넌트 제작:
-  - [ ] `MemberProfileCard`
-  - [ ] `SessionHistoryList`
-  - [ ] `SessionDetailHeader`
-  - [ ] `NotionBlockRenderer`
-- [ ] 레이아웃 잡기 (헤더, 푸터, 여백)
-- [ ] TOSS 스타일 적용 (폰트, 여백, 색상)
+  - [ ] `MemberProfileCard`: 회원 정보 표시
+  - [ ] `SessionHistoryList`: 수업 리스트 표시
+  - [ ] `SessionDetailHeader`: 헤더(뒤로가기, 날짜)
+- [ ] 레이아웃 및 TOSS 스타일 적용
 
-### Phase 4: 통합 및 배포 (1-2일)
-- [ ] Dynamic Route 설정 (`/members/[id]`, `/members/[id]/sessions/[sessionId]`)
+### Phase 4: 통합, 테스트 및 배포 (2-3일)
+- [ ] `error.tsx`, `loading.tsx` 구현 (에러 처리 및 로딩 상태)
 - [ ] 페이지 간 네비게이션 확인
 - [ ] 모바일 반응형 테스트
+- [ ] SEO 메타 태그 설정 (generateMetadata 사용)
 - [ ] Vercel 배포
 - [ ] 프로덕션 환경 테스트
 
-**총 소요 시간:** 7-10일
+**총 소요 시간:** 10-14일
 
 ---
 
@@ -420,7 +437,7 @@ function calculateDDay(startDate: Date): string {
 | 리스크 | 영향 | 대응 방안 |
 | :--- | :--- | :--- |
 | **Notion API Rate Limit** | 요청 실패, 데이터 미반영 | ISR 캐싱으로 API 호출 최소화 (1시간 단위) |
-| **Notion Block 렌더링 복잡도** | 일부 블록 미지원 | MVP는 4가지 기본 타입만 지원 (텍스트, 리스트, 이미지, 토글) |
+| **Notion Block 렌더링 복잡도** | 일부 블록 미지원 | MVP는 3가지 기본 타입만 지원 (Paragraph, Heading, Image); 나머지는 Phase 2 이후 |
 | **이미지 최적화** | 로딩 지연 | Next.js Image 컴포넌트 + Vercel 이미지 최적화 |
 | **브라우저 호환성** | 구형 브라우저에서 오류 | iOS Safari, Chrome 최신 2개 버전 지원 |
 
@@ -438,6 +455,45 @@ function calculateDDay(startDate: Date): string {
 - **실시간성:** ISR 캐싱으로 인해 최대 1시간 지연 가능
 - **오프라인 접근 불가:** 인터넷 연결 필수
 - **데이터 다운로드 불가:** 기록 다운로드/내보내기 기능 미지원 (MVP)
+
+### 11.4 환경 변수 관리
+
+**필수 환경 변수 (`.env.local`)**
+```bash
+# Notion API 인증
+NOTION_API_KEY=secret_xxxxxxxxxxxxx
+
+# Notion Database IDs (Notion 워크스페이스에서 획득)
+NOTION_MEMBERS_DB_ID=xxxxxxxxxxxxx
+NOTION_SESSIONS_DB_ID=xxxxxxxxxxxxx
+```
+
+**설정 방법:**
+1. Notion 계정으로 [Notion Developers](https://www.notion.so/my-integrations) 접속
+2. 새로운 Internal Integration 생성
+3. API Key 복사 → `.env.local`의 `NOTION_API_KEY`에 저장
+4. Members DB 및 Sessions DB의 Database ID 확인 → 환경 변수에 저장
+
+### 11.5 SEO 및 메타 태그
+
+**동적 메타데이터 생성 (개인 정보 보호)**
+```typescript
+// app/members/[id]/layout.tsx
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const member = await getMember(id);
+  return {
+    title: `${member.name}님의 운동 기록 - 샐리랑`,
+    robots: 'noindex, nofollow', // 검색 엔진 크롤링 차단
+    description: '개인 운동 기록 열람 서비스',
+  };
+}
+```
+
+**보안 고려:**
+- `robots: 'noindex'`로 개인 정보 보호
+- 동적 라우트는 검색 엔진 인덱싱 제외
+- UUID 기반 접근 제어로 직접 접근만 허용
 
 ---
 
