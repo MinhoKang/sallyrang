@@ -22,13 +22,14 @@ interface MemberItemProps {
  * 회원 이름, 기본 정보를 표시하고 회원 페이지로 링크합니다.
  */
 export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps>) {
-  const handleCopyUrlAndNavigate = async () => {
-    const memberUrl = `http://localhost:3000/members/${member.id}`;
+  const handleCopyUrl = async () => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const memberUrl = `${baseUrl}/members/${member.id}`;
 
     try {
       await navigator.clipboard.writeText(memberUrl);
       toast.success('URL이 복사되었습니다.');
-    } catch (error) {
+    } catch {
       toast.error('URL 복사에 실패했습니다.');
     }
   };
@@ -37,7 +38,7 @@ export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps
 
   return (
     <Link href={`/members/${member.id}`} className='group block'>
-      <Card className={`hover:border-primary/50 border-2 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg ${!isListLayout ? 'h-full' : ''}`}>
+      <Card className={`border-2 hover:border-primary/50 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg ${!isListLayout ? 'h-full' : ''}`}>
         <CardContent className={isListLayout ? 'flex items-center justify-between gap-4 p-5' : 'flex flex-col gap-3 p-5 h-full'}>
           {/* 회원 정보 */}
           <div className={isListLayout ? 'flex-1 space-y-2' : 'w-full space-y-2'}>
@@ -82,7 +83,7 @@ export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps
                 {member.totalTuition.toLocaleString()}원
               </span>
             </div>
-            {/* URL 복사 및 이동 버튼 */}
+            {/* URL 복사 버튼 */}
             <Button
               variant='outline'
               size='sm'
@@ -90,7 +91,7 @@ export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                handleCopyUrlAndNavigate();
+                handleCopyUrl();
               }}
             >
               <ClipboardIcon className='size-4' />
@@ -101,7 +102,7 @@ export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps
           {/* 우측: 화살표 아이콘 (list layout에서만 표시) */}
           {isListLayout && (
             <ChevronRight
-              className='text-muted-foreground group-hover:text-primary h-6 w-6 flex-shrink-0 transition-all duration-200 group-hover:translate-x-1'
+              className='text-muted-foreground group-hover:text-primary h-6 w-6 shrink-0 transition-all duration-200 group-hover:translate-x-1'
               aria-hidden='true'
             />
           )}

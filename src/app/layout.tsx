@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   // 기본 메타데이터 베이스 URL 설정 (배포 시 실제 도메인으로 변경)
@@ -71,6 +72,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
