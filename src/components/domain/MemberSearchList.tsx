@@ -6,7 +6,8 @@ import type { Member } from '@/types/domain';
 import { MemberItem } from './MemberItem';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Search, List, LayoutGrid } from 'lucide-react';
 
 interface MemberSearchListProps {
   readonly members: Member[];
@@ -18,6 +19,7 @@ interface MemberSearchListProps {
  */
 export function MemberSearchList({ members }: Readonly<MemberSearchListProps>) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const parentRef = useRef<HTMLDivElement>(null);
 
   // 검색 필터링 (대소문자 구분 안 함)
@@ -52,8 +54,8 @@ export function MemberSearchList({ members }: Readonly<MemberSearchListProps>) {
 
   return (
     <section aria-labelledby="member-search-title" className="space-y-6">
-      {/* 섹션 타이틀 */}
-      <div className="space-y-4">
+      {/* 섹션 타이틀 및 View 토글 */}
+      <div className="flex items-center justify-between gap-4">
         <h2
           id="member-search-title"
           className="text-2xl sm:text-3xl font-bold tracking-tight"
@@ -61,6 +63,33 @@ export function MemberSearchList({ members }: Readonly<MemberSearchListProps>) {
           회원 목록 🎯
         </h2>
 
+        {/* View Toggle 버튼 */}
+        <div className="flex gap-2">
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="gap-2"
+            aria-label="리스트 보기"
+          >
+            <List className="h-4 w-4" />
+            <span className="hidden sm:inline">리스트</span>
+          </Button>
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('grid')}
+            className="gap-2"
+            aria-label="카드 보기"
+          >
+            <LayoutGrid className="h-4 w-4" />
+            <span className="hidden sm:inline">카드</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* 검색 및 결과 정보 */}
+      <div className="space-y-4">
         {/* 검색 입력 필드 */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -102,8 +131,8 @@ export function MemberSearchList({ members }: Readonly<MemberSearchListProps>) {
             다른 이름으로 검색해보세요
           </p>
         </div>
-      ) : (
-        /* 가상화된 회원 리스트 */
+      ) : viewMode === 'list' ? (
+        /* List View: 가상화된 회원 리스트 */
         <div
           ref={parentRef}
           className="h-[1000px] overflow-auto"
@@ -134,12 +163,19 @@ export function MemberSearchList({ members }: Readonly<MemberSearchListProps>) {
                   }}
                 >
                   <div className="px-4 pb-3">
-                    <MemberItem member={member} />
+                    <MemberItem member={member} layout="list" />
                   </div>
                 </div>
               );
             })}
           </div>
+        </div>
+      ) : (
+        /* Grid View: 회원 카드 그리드 레이아웃 */
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
+          {filteredMembers.map((member) => (
+            <MemberItem key={member.id} member={member} layout="grid" />
+          ))}
         </div>
       )}
     </section>

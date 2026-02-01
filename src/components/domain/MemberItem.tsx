@@ -9,13 +9,19 @@ import { toast } from 'sonner';
 
 interface MemberItemProps {
   member: Member;
+  /**
+   * 레이아웃 모드
+   * 'list': 수평 레이아웃 (기본값)
+   * 'grid': 수직 카드 레이아웃
+   */
+  layout?: 'list' | 'grid';
 }
 
 /**
  * 개별 회원 카드 컴포넌트
  * 회원 이름, 기본 정보를 표시하고 회원 페이지로 링크합니다.
  */
-export function MemberItem({ member }: MemberItemProps) {
+export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps>) {
   const handleCopyUrlAndNavigate = async () => {
     const memberUrl = `http://localhost:3000/members/${member.id}`;
 
@@ -27,12 +33,14 @@ export function MemberItem({ member }: MemberItemProps) {
     }
   };
 
+  const isListLayout = layout === 'list';
+
   return (
     <Link href={`/members/${member.id}`} className='group block'>
-      <Card className='hover:border-primary/50 border-2 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg'>
-        <CardContent className='flex items-center justify-between gap-4 p-5'>
-          {/* 좌측: 회원 정보 */}
-          <div className='flex-1 space-y-2'>
+      <Card className={`hover:border-primary/50 border-2 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg ${!isListLayout ? 'h-full' : ''}`}>
+        <CardContent className={isListLayout ? 'flex items-center justify-between gap-4 p-5' : 'flex flex-col gap-3 p-5 h-full'}>
+          {/* 회원 정보 */}
+          <div className={isListLayout ? 'flex-1 space-y-2' : 'w-full space-y-2'}>
             {/* 이름 */}
             <h3 className='group-hover:text-primary text-lg font-bold transition-colors duration-200 sm:text-xl'>
               {member.name} ({member.gender})
@@ -90,11 +98,13 @@ export function MemberItem({ member }: MemberItemProps) {
             </Button>
           </div>
 
-          {/* 우측: 화살표 아이콘 */}
-          <ChevronRight
-            className='text-muted-foreground group-hover:text-primary h-6 w-6 flex-shrink-0 transition-all duration-200 group-hover:translate-x-1'
-            aria-hidden='true'
-          />
+          {/* 우측: 화살표 아이콘 (list layout에서만 표시) */}
+          {isListLayout && (
+            <ChevronRight
+              className='text-muted-foreground group-hover:text-primary h-6 w-6 flex-shrink-0 transition-all duration-200 group-hover:translate-x-1'
+              aria-hidden='true'
+            />
+          )}
         </CardContent>
       </Card>
     </Link>

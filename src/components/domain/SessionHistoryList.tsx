@@ -1,9 +1,11 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { Session } from '@/types/domain';
 import { SessionHistoryItem } from './SessionHistoryItem';
+import { Button } from '@/components/ui/button';
+import { LayoutGrid, List } from 'lucide-react';
 
 interface SessionHistoryListProps {
   readonly sessions: Session[];
@@ -19,6 +21,7 @@ export function SessionHistoryList({
   sessions,
   memberId,
 }: Readonly<SessionHistoryListProps>) {
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const parentRef = useRef<HTMLDivElement>(null);
 
   // 날짜 기준 최신순 정렬
@@ -46,57 +49,97 @@ export function SessionHistoryList({
 
   return (
     <section aria-labelledby='session-history-title' className='space-y-6'>
-      {/* 섹션 타이틀 */}
-      <div className='flex items-center justify-between'>
-        <h2
-          id='session-history-title'
-          className='text-2xl font-bold sm:text-3xl'
-        >
-          내 운동 기록 📋
-        </h2>
-        <span className='text-muted-foreground bg-muted rounded-lg px-3 py-1.5 text-sm font-semibold'>
-          총 {sortedSessions.length}회
-        </span>
-      </div>
+      {/* 섹션 타이틀 및 View 토글 */}
+      <div className='flex items-center justify-between gap-4'>
+        <div className='flex items-center gap-3'>
+          <h2
+            id='session-history-title'
+            className='text-2xl font-bold sm:text-3xl'
+          >
+            내 운동 기록 📋
+          </h2>
+          <span className='text-muted-foreground bg-muted rounded-lg px-3 py-1.5 text-sm font-semibold'>
+            총 {sortedSessions.length}회
+          </span>
+        </div>
 
-      {/* 가상화된 수업 리스트 */}
-      <div
-        ref={parentRef}
-        className='h-[1000px] overflow-auto'
-        style={{
-          contain: 'strict',
-        }}
-      >
-        <div
-          style={{
-            height: `${virtualizer.getTotalSize()}px`,
-            width: '100%',
-            position: 'relative',
-          }}
-        >
-          {virtualizer.getVirtualItems().map((virtualItem) => {
-            const session = sortedSessions[virtualItem.index];
-            return (
-              <div
-                key={virtualItem.key}
-                data-index={virtualItem.index}
-                ref={virtualizer.measureElement}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  transform: `translateY(${virtualItem.start}px)`,
-                }}
-              >
-                <div className='px-4 pb-3'>
-                  <SessionHistoryItem session={session} memberId={memberId} />
-                </div>
-              </div>
-            );
-          })}
+        {/* View Toggle 버튼 */}
+        <div className='flex gap-2'>
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'outline'}
+            size='sm'
+            onClick={() => setViewMode('list')}
+            className='gap-2'
+            aria-label='리스트 보기'
+          >
+            <List className='h-4 w-4' />
+            <span className='hidden sm:inline'>리스트</span>
+          </Button>
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            size='sm'
+            onClick={() => setViewMode('grid')}
+            className='gap-2'
+            aria-label='카드 보기'
+          >
+            <LayoutGrid className='h-4 w-4' />
+            <span className='hidden sm:inline'>카드</span>
+          </Button>
         </div>
       </div>
+
+      {/* List View: 가상화된 수업 리스트 */}
+      {viewMode === 'list' ? (
+        <div
+          ref={parentRef}
+          className='h-[1000px] overflow-auto'
+          style={{
+            contain: 'strict',
+          }}
+        >
+          <div
+            style={{
+              height: `${virtualizer.getTotalSize()}px`,
+              width: '100%',
+              position: 'relative',
+            }}
+          >
+            {virtualizer.getVirtualItems().map((virtualItem) => {
+              const session = sortedSessions[virtualItem.index];
+              return (
+                <div
+                  key={virtualItem.key}
+                  data-index={virtualItem.index}
+                  ref={virtualizer.measureElement}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    transform: `translateY(${virtualItem.start}px)`,
+                  }}
+                >
+                  <div className='px-4 pb-3'>
+                    <SessionHistoryItem session={session} memberId={memberId} layout='list' />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        /* Grid View: 카드 그리드 레이아웃 */
+        <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr'>
+          {sortedSessions.map((session) => (
+            <SessionHistoryItem
+              key={session.id}
+              session={session}
+              memberId={memberId}
+              layout='grid'
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

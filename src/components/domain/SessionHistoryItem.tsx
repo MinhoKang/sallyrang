@@ -12,6 +12,12 @@ interface SessionHistoryItemProps {
    * 리스트 인덱스에 따라 순차적으로 나타나는 효과
    */
   animationDelay?: number;
+  /**
+   * 레이아웃 모드
+   * 'list': 수평 레이아웃 (기본값)
+   * 'grid': 수직 카드 레이아웃
+   */
+  layout?: 'list' | 'grid';
 }
 
 /**
@@ -22,9 +28,12 @@ export function SessionHistoryItem({
   session,
   memberId,
   animationDelay = 0,
-}: SessionHistoryItemProps) {
+  layout = 'list',
+}: Readonly<SessionHistoryItemProps>) {
   const formattedDate = formatDate(session.date);
   const isCompleted = session.status === '완료';
+
+  const isListLayout = layout === 'list';
 
   return (
     <Link
@@ -34,10 +43,10 @@ export function SessionHistoryItem({
         animationDelay: `${animationDelay}ms`,
       }}
     >
-      <Card className='hover:border-primary/50 animate-fade-in border-2 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg'>
-        <CardContent className='flex items-center justify-between gap-4 p-5'>
-          {/* 좌측: 날짜 + 제목 */}
-          <div className='flex-1 space-y-2'>
+      <Card className={`hover:border-primary/50 animate-fade-in border-2 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg ${!isListLayout ? 'h-full' : ''}`}>
+        <CardContent className={isListLayout ? 'flex items-center justify-between gap-4 p-5' : 'flex flex-col gap-3 p-5 h-full'}>
+          {/* 콘텐츠 */}
+          <div className={isListLayout ? 'flex-1 space-y-2' : 'w-full space-y-2'}>
             {/* 날짜 */}
             <time
               dateTime={session.date}
@@ -67,11 +76,13 @@ export function SessionHistoryItem({
             </div>
           </div>
 
-          {/* 우측: 화살표 아이콘 */}
-          <ChevronRight
-            className='text-muted-foreground group-hover:text-primary h-6 w-6 flex-shrink-0 transition-all duration-200 group-hover:translate-x-1'
-            aria-hidden='true'
-          />
+          {/* 우측: 화살표 아이콘 (list layout에서만 표시) */}
+          {isListLayout && (
+            <ChevronRight
+              className='text-muted-foreground group-hover:text-primary h-6 w-6 flex-shrink-0 transition-all duration-200 group-hover:translate-x-1'
+              aria-hidden='true'
+            />
+          )}
         </CardContent>
       </Card>
     </Link>
