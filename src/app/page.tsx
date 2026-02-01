@@ -1,5 +1,6 @@
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -17,13 +18,15 @@ export default function Home() {
           </p>
         </div>
         {/* Sally 캐릭터 이미지  */}
-        <Image
-          src='/images/characters/sally-removebg-preview.png'
-          alt='Sally'
-          width={500}
-          height={500}
-          className='rounded-lg'
-        />
+        <Link href='/admin'>
+          <Image
+            src='/images/characters/sally-removebg-preview.png'
+            alt='Sally'
+            width={500}
+            height={500}
+            className='rounded-lg'
+          />
+        </Link>
       </main>
     </div>
   );
