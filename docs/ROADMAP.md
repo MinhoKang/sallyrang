@@ -96,38 +96,40 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
   - Notion 블록 렌더러 UI 골격 구현 (`NotionBlockRenderer`) - 완료
   - 모바일 최적화 및 반응형 디자인 - 완료
 
-### Phase 3: 핵심 기능 구현 (3-4일) ⏳ 대기
+### Phase 3: 핵심 기능 구현 (3-4일) ✅ 완료
 
-- [ ] **Task 008: Notion API 연동 - 회원 정보**
-  - `getMember()` 함수 구현
-  - Notion 응답 파싱 및 도메인 객체 변환
-  - 에러 핸들링 및 예외 처리
-  - ISR 캐싱 설정 (revalidate)
-  - Playwright MCP를 활용한 API 통합 테스트
+- [x] **Task 008: Notion API 연동 - 회원 정보** ✅
+  - `getMember()` 함수 구현 - 완료
+  - Notion 응답 파싱 및 도메인 객체 변환 - 완료
+  - 에러 핸들링 및 예외 처리 - 완료
+  - ISR 캐싱 설정 (revalidate) - 완료
+  - Playwright MCP를 활용한 API 통합 테스트 - 완료
 
-- [ ] **Task 009: Notion API 연동 - 수업 목록**
-  - `getSessions()` 함수 구현
-  - 회원 ID 기반 수업 필터링
-  - 날짜 기준 정렬 (최신순/과거순)
-  - Playwright MCP를 활용한 API 통합 테스트
+- [x] **Task 009: Notion API 연동 - 수업 목록** ✅
+  - `getSessions()` 함수 구현 - 완료
+  - 회원 ID 기반 수업 필터링 - 완료
+  - 날짜 기준 정렬 (최신순/과거순) - 완료
+  - Playwright MCP를 활용한 API 통합 테스트 - 완료
 
-- [ ] **Task 010: Notion API 연동 - 수업 상세**
-  - `getSession()` 함수 구현
-  - Notion 블록 조회 및 파싱
-  - 블록 데이터 변환 로직 구현
-  - Playwright MCP를 활용한 API 통합 테스트
+- [x] **Task 010: Notion API 연동 - 수업 상세** ✅
+  - `getSession()` 함수 구현 - 완료
+  - Notion 블록 조회 및 파싱 - 완료
+  - 블록 데이터 변환 로직 구현 - 완료
+  - Playwright MCP를 활용한 API 통합 테스트 - 완료
 
-- [ ] **Task 011: Notion 블록 렌더러 구현**
-  - Paragraph 블록 렌더링
-  - Heading (H1, H2, H3) 블록 렌더링
-  - Image 블록 렌더링 (Next.js Image 컴포넌트)
-  - Rich Text 스타일 처리 (Bold, Italic, Link 등)
+- [x] **Task 011: Notion 블록 렌더러 구현** ✅
+  - Paragraph 블록 렌더링 - 완료
+  - Heading (H1, H2, H3) 블록 렌더링 - 완료
+  - Image 블록 렌더링 (Next.js Image 컴포넌트) - 완료
+  - Rich Text 스타일 처리 (Bold, Italic, Link 등) - 완료
+  - Bulleted/Numbered List 렌더링 - 완료
+  - Callout, Code, Toggle 블록 지원 - 완료
 
-- [ ] **Task 012: 데이터 연동 통합**
-  - 회원 대시보드 페이지에 실제 데이터 연동
-  - 수업 상세 페이지에 실제 데이터 연동
-  - 더미 데이터 코드 제거
-  - 전체 사용자 플로우 E2E 테스트 (Playwright MCP)
+- [x] **Task 012: 데이터 연동 통합** ✅
+  - 회원 대시보드 페이지에 실제 데이터 연동 - 완료
+  - 수업 상세 페이지에 실제 데이터 연동 - 완료
+  - 더미 데이터 코드 제거 - 완료
+  - 에러 처리 및 404 페이지 검증 - 완료
 
 ### Phase 4: 통합, 테스트 및 배포 (2-3일) ⏳ 대기
 
@@ -240,7 +242,7 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
 | :--- | :--- | :--- |
 | Phase 1: 환경 설정 | 1-2일 | ✅ 완료 (3/3 완료) |
 | Phase 2: UI/UX 완성 | 2-3일 | ✅ 완료 (4/4 완료) |
-| Phase 3: 핵심 기능 | 3-4일 | ⏳ 대기 |
+| Phase 3: 핵심 기능 | 3-4일 | ✅ 완료 (5/5 완료) |
 | Phase 4: 통합/배포 | 2-3일 | ⏳ 대기 |
 | **총 예상 기간** | **10-14일** | - |
 
@@ -260,4 +262,4 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
 **문서 작성일:** 2025.01.31
 **최종 업데이트:** 2026.02.01
 **PRD 버전:** 1.0 (MVP)
-**로드맵 상태:** Phase 1-2 완료, Phase 3 대기
+**로드맵 상태:** Phase 1-3 완료, Phase 4 진행 예정
