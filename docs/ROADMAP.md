@@ -164,7 +164,38 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
   - 성능 개선 문서 작성 (docs/SUSPENSE_OPTIMIZATION.md) - 완료
   - 빌드 검증 및 테스트 - 완료
 
-- [ ] **Task 017: Vercel 배포**
+### Phase 4-1: 관리자 대시보드 기능 구현 (1-2일) ✅ 완료
+
+- [x] **Task 017-1: Notion API 확장 - getAllMembers() 함수 추가** ✅
+  - `getAllMembers()` 함수 구현 - 완료
+  - NOTION_MEMBERS_DB_ID에서 모든 회원 조회 - 완료
+  - 기존 parseMemberData() 함수 활용 - 완료
+  - 에러 처리 및 로깅 - 완료
+  - ISR 캐싱 적용 - 완료
+
+- [x] **Task 017-2: 비밀번호 인증 폼 컴포넌트 구현** ✅
+  - `AdminPasswordForm.tsx` 컴포넌트 생성 - 완료
+  - 비밀번호 입력 폼 (Client Component) - 완료
+  - sessionStorage 기반 인증 관리 - 완료
+  - Sonner 토스트로 성공/실패 피드백 - 완료
+  - TOSS UI 스타일 적용 - 완료
+
+- [x] **Task 017-3: 검색 기능이 있는 가상화 회원 리스트 컴포넌트** ✅
+  - `MemberSearchList.tsx` 컴포넌트 구현 - 완료
+  - `MemberItem.tsx` 컴포넌트 구현 - 완료
+  - 이름으로 실시간 검색 기능 - 완료
+  - @tanstack/react-virtual을 사용한 가상화 - 완료
+  - 각 회원 클릭 시 /members/[id] 링크로 이동 - 완료
+
+- [x] **Task 017-4: 관리자 대시보드 페이지 구현** ✅
+  - `src/app/admin/page.tsx` 구현 (Server Component) - 완료
+  - `AdminContent.tsx` 컴포넌트 구현 (Client Wrapper) - 완료
+  - 페이지 로드 시 getAllMembers() 데이터 페칭 - 완료
+  - 비밀번호 인증 확인 로직 - 완료
+  - 로그아웃 기능 구현 - 완료
+  - 헤더에 로고와 인증 상태 표시 - 완료
+
+- [ ] **Task 018: Vercel 배포**
   - 환경 변수 설정 (Vercel Dashboard)
   - 프로덕션 배포
   - 프로덕션 환경 테스트
@@ -258,8 +289,9 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
 | Phase 1: 환경 설정 | 1-2일 | ✅ 완료 (3/3 완료) |
 | Phase 2: UI/UX 완성 | 2-3일 | ✅ 완료 (4/4 완료) |
 | Phase 3: 핵심 기능 | 3-4일 | ✅ 완료 (5/5 완료) |
-| Phase 4: 통합/배포 | 2-3일 | 🚧 진행 중 (4/5 완료) |
-| **총 예상 기간** | **10-14일** | - |
+| Phase 4: 통합/배포 | 2-3일 | 🚧 진행 중 (5/6 완료) |
+| Phase 4-1: 관리자 대시보드 | 1-2일 | ✅ 완료 (4/4 완료) |
+| **총 예상 기간** | **11-15일** | - |
 
 ---
 
@@ -277,4 +309,4 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
 **문서 작성일:** 2025.01.31
 **최종 업데이트:** 2026.02.01
 **PRD 버전:** 1.0 (MVP)
-**로드맵 상태:** Phase 1-3 완료, Phase 4 진행 예정
+**로드맵 상태:** Phase 1-4-1 완료, Phase 4 최종 배포 단계
