@@ -62,7 +62,7 @@ export function SessionHistoryList({
       {/* 가상화된 수업 리스트 */}
       <div
         ref={parentRef}
-        className='h-[600px] overflow-auto'
+        className='h-[1000px] overflow-auto'
         style={{
           contain: 'strict',
         }}
@@ -89,11 +89,8 @@ export function SessionHistoryList({
                   transform: `translateY(${virtualItem.start}px)`,
                 }}
               >
-                <div className='pb-3 px-4'>
-                  <SessionHistoryItem
-                    session={session}
-                    memberId={memberId}
-                  />
+                <div className='px-4 pb-3'>
+                  <SessionHistoryItem session={session} memberId={memberId} />
                 </div>
               </div>
             );
