@@ -6,6 +6,7 @@ import { SessionList } from '@/components/domain/async/SessionList';
 import { ProfileSkeleton } from '@/components/ui/skeleton/ProfileSkeleton';
 import { SessionListSkeleton } from '@/components/ui/skeleton/SessionListSkeleton';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import Link from 'next/link';
 
 interface MemberPageProps {
   params: Promise<{
@@ -32,9 +33,11 @@ export default async function MemberPage({ params }: MemberPageProps) {
       <header className='bg-background/80 sticky top-0 z-20 border-b-2 backdrop-blur-lg'>
         <div className='container mx-auto flex h-16 items-center justify-between px-4'>
           {/* 로고 */}
-          <h1 className='mx-auto text-xl font-bold tracking-tight sm:text-2xl'>
-            샐리랑 💪
-          </h1>
+          <Link className='mx-auto' href='/'>
+            <h1 className='mx-auto text-xl font-bold tracking-tight sm:text-2xl'>
+              샐리랑 💪
+            </h1>
+          </Link>
 
           {/* 테마 토글 버튼 */}
           <ThemeToggle />

@@ -70,7 +70,7 @@ export async function SessionContent({ sessionId }: SessionContentProps) {
             <h2 className='text-xl font-bold'>수업 내용</h2>
             <p className='text-base leading-relaxed whitespace-pre-wrap'>
               {session.content}
-            </p>
+            </p>랑
           </CardContent>
         </Card>
       ) : (
