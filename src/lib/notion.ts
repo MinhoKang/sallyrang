@@ -359,6 +359,12 @@ function parseSessionDetail(
       ? extractRichText(page.properties.Content)
       : undefined;
 
+  // Comment 필드 추출 (사용자 메모, 선택사항)
+  const comment =
+    page.properties.Comment && 'rich_text' in page.properties.Comment
+      ? extractRichText(page.properties.Comment)
+      : undefined;
+
   return {
     id: page.id,
     title: extractTitleText(page.properties.Title),
@@ -367,6 +373,7 @@ function parseSessionDetail(
     status: extractSelect(page.properties.Status),
     feedback: extractRichText(page.properties.Feedback) || undefined,
     note: extractRichText(page.properties.Note) || undefined,
+    comment: comment,
     images: [],
     blocks: parseBlocksData(blocks),
     content: content,

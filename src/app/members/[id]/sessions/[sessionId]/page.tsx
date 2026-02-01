@@ -37,7 +37,7 @@ export default async function SessionPage({ params }: SessionPageProps) {
       {/* Main Content - Suspense로 독립적 스트리밍 */}
       <main className="container mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <Suspense fallback={<SessionContentSkeleton />}>
-          <SessionContent sessionId={sessionId} />
+          <SessionContent sessionId={sessionId} memberId={id} />
         </Suspense>
       </main>
     </div>

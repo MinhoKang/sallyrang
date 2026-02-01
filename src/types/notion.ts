@@ -110,6 +110,8 @@ export interface NotionSessionPage extends PageObjectResponse {
     Sequence: NotionRichText;
     /** 진행 상태 (완료/예정/미완료) */
     Status: NotionSelect;
+    /** 사용자 메모 (회원이 작성) */
+    Comment?: NotionRichText;
   };
 }
 

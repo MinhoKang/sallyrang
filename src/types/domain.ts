@@ -46,6 +46,8 @@ export interface Session {
   feedback?: string;
   /** 비고 */
   note?: string;
+  /** 사용자 메모 (회원이 작성) */
+  comment?: string;
   /** 이미지 URL 목록 */
   images?: string[];
 }

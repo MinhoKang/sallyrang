@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { NotionBlockRenderer } from '@/components/domain/NotionBlockRenderer';
+import { SessionCommentForm } from '@/components/domain/SessionCommentForm';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { getSession } from '@/lib/notion';
@@ -7,6 +8,7 @@ import { MessageSquare, Image as ImageIcon } from 'lucide-react';
 
 interface SessionContentProps {
   sessionId: string;
+  memberId: string;
 }
 
 /**
@@ -16,8 +18,12 @@ interface SessionContentProps {
  * @description
  * - getSession() API 호출 및 Notion 블록 렌더링
  * - 헤더와 독립적으로 로딩 가능
+ * - 수업 하단에 사용자 메모 폼 포함
  */
-export async function SessionContent({ sessionId }: SessionContentProps) {
+export async function SessionContent({
+  sessionId,
+  memberId,
+}: SessionContentProps) {
   const session = await getSession(sessionId);
 
   // 세션이 없으면 404 표시
@@ -105,6 +111,13 @@ export async function SessionContent({ sessionId }: SessionContentProps) {
           </CardContent>
         </Card>
       )}
+
+      {/* 사용자 메모 폼 */}
+      <SessionCommentForm
+        sessionId={sessionId}
+        memberId={memberId}
+        initialComment={session.comment}
+      />
     </div>
   );
 }
