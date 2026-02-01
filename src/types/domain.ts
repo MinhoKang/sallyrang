@@ -39,7 +39,7 @@ export interface Session {
   /** 수업 날짜 (YYYY-MM-DD 형식) */
   date: string;
   /** 수업 회차 */
-  sequence: number;
+  sequence: string;
   /** 진행 상태 (완료, 예정, 미완료) */
   status: string;
   /** 피드백 */

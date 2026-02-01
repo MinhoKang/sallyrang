@@ -154,7 +154,7 @@ function parseSessionsData(pages: NotionSessionPage[]): Session[] {
     id: page.id,
     title: extractTitleText(page.properties.Title),
     date: extractDate(page.properties.Date),
-    sequence: extractNumber(page.properties.Sequence),
+    sequence: extractRichText(page.properties.Sequence),
     status: extractSelect(page.properties.Status),
     feedback: extractRichText(page.properties.Feedback) || undefined,
     note: extractRichText(page.properties.Note) || undefined,
@@ -167,10 +167,30 @@ function parseSessionsData(pages: NotionSessionPage[]): Session[] {
  */
 function getBlockRichText(block: NotionBlock): NotionRichTextItem[] {
   // BlockObjectResponse에서 각 블록 타입에 해당하는 데이터 추출
-  const blockTypeData = block[block.type as keyof Omit<typeof block, 'type' | 'id' | 'parent' | 'created_time' | 'last_edited_time' | 'created_by' | 'last_edited_by' | 'has_children' | 'archived'>];
+  const blockTypeData =
+    block[
+      block.type as keyof Omit<
+        typeof block,
+        | 'type'
+        | 'id'
+        | 'parent'
+        | 'created_time'
+        | 'last_edited_time'
+        | 'created_by'
+        | 'last_edited_by'
+        | 'has_children'
+        | 'archived'
+      >
+    ];
 
-  if (blockTypeData && typeof blockTypeData === 'object' && 'rich_text' in blockTypeData) {
-    return (blockTypeData as { rich_text: NotionRichTextItem[] }).rich_text || [];
+  if (
+    blockTypeData &&
+    typeof blockTypeData === 'object' &&
+    'rich_text' in blockTypeData
+  ) {
+    return (
+      (blockTypeData as { rich_text: NotionRichTextItem[] }).rich_text || []
+    );
   }
 
   return [];
@@ -203,9 +223,7 @@ function extractImageCaption(block: NotionBlock): string | undefined {
   if (block.type !== 'image') return undefined;
 
   const imageData = block.image as { caption?: NotionRichTextItem[] };
-  const caption = imageData?.caption
-    ?.map((c) => c.plain_text || '')
-    .join('');
+  const caption = imageData?.caption?.map((c) => c.plain_text || '').join('');
 
   return caption || undefined;
 }
@@ -324,15 +342,16 @@ function parseSessionDetail(
   blocks: NotionBlock[]
 ): SessionDetail {
   // Content 필드 추출 (선택사항: Content 필드가 있는 경우)
-  const content = (page.properties.Content && 'rich_text' in page.properties.Content)
-    ? extractRichText(page.properties.Content as NotionRichText)
-    : undefined;
+  const content =
+    page.properties.Content && 'rich_text' in page.properties.Content
+      ? extractRichText(page.properties.Content as NotionRichText)
+      : undefined;
 
   return {
     id: page.id,
     title: extractTitleText(page.properties.Title),
     date: extractDate(page.properties.Date),
-    sequence: extractNumber(page.properties.Sequence),
+    sequence: extractRichText(page.properties.Sequence),
     status: extractSelect(page.properties.Status),
     feedback: extractRichText(page.properties.Feedback) || undefined,
     note: extractRichText(page.properties.Note) || undefined,
@@ -432,7 +451,10 @@ export async function getSession(sessionId: string): Promise<SessionDetail> {
     });
 
     console.log(`[Notion] Fetched ${blocksResponse.results.length} blocks`);
-    console.log(`[Notion] Block types:`, blocksResponse.results.map(b => (b as NotionBlock).type));
+    console.log(
+      `[Notion] Block types:`,
+      blocksResponse.results.map((b) => (b as NotionBlock).type)
+    );
 
     const blocks = blocksResponse.results as NotionBlock[];
     const sessionDetail = parseSessionDetail(page, blocks);
@@ -441,7 +463,7 @@ export async function getSession(sessionId: string): Promise<SessionDetail> {
       id: sessionDetail.id,
       title: sessionDetail.title,
       blocksCount: sessionDetail.blocks.length,
-      blockTypes: sessionDetail.blocks.map(b => b.type),
+      blockTypes: sessionDetail.blocks.map((b) => b.type),
     });
 
     return sessionDetail;

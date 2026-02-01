@@ -2,7 +2,7 @@ import type {
   PageObjectResponse,
   BlockObjectResponse,
   RichTextItemResponse,
-} from "@notionhq/client/build/src/api-endpoints";
+} from '@notionhq/client/build/src/api-endpoints';
 
 /**
  * Notion Property 타입들
@@ -11,44 +11,44 @@ import type {
 
 /** 제목 프로퍼티 타입 */
 export type NotionTitle = Extract<
-  PageObjectResponse["properties"][string],
-  { type: "title" }
+  PageObjectResponse['properties'][string],
+  { type: 'title' }
 >;
 
 /** 리치 텍스트 프로퍼티 타입 */
 export type NotionRichText = Extract<
-  PageObjectResponse["properties"][string],
-  { type: "rich_text" }
+  PageObjectResponse['properties'][string],
+  { type: 'rich_text' }
 >;
 
 /** 숫자 프로퍼티 타입 */
 export type NotionNumber = Extract<
-  PageObjectResponse["properties"][string],
-  { type: "number" }
+  PageObjectResponse['properties'][string],
+  { type: 'number' }
 >;
 
 /** 선택 프로퍼티 타입 */
 export type NotionSelect = Extract<
-  PageObjectResponse["properties"][string],
-  { type: "select" }
+  PageObjectResponse['properties'][string],
+  { type: 'select' }
 >;
 
 /** 날짜 프로퍼티 타입 */
 export type NotionDate = Extract<
-  PageObjectResponse["properties"][string],
-  { type: "date" }
+  PageObjectResponse['properties'][string],
+  { type: 'date' }
 >;
 
 /** 관계형 프로퍼티 타입 */
 export type NotionRelation = Extract<
-  PageObjectResponse["properties"][string],
-  { type: "relation" }
+  PageObjectResponse['properties'][string],
+  { type: 'relation' }
 >;
 
 /** 파일 프로퍼티 타입 */
 export type NotionFiles = Extract<
-  PageObjectResponse["properties"][string],
-  { type: "files" }
+  PageObjectResponse['properties'][string],
+  { type: 'files' }
 >;
 
 /**
@@ -101,7 +101,7 @@ export interface NotionSessionPage extends PageObjectResponse {
     /** 비고 */
     Note: NotionRichText;
     /** 수업 회차 */
-    Sequence: NotionNumber;
+    Sequence: NotionRichText;
     /** 진행 상태 (완료/예정/미완료) */
     Status: NotionSelect;
   };

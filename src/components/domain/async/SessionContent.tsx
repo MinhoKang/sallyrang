@@ -100,9 +100,7 @@ export async function SessionContent({ sessionId }: SessionContentProps) {
           style={{ animationDelay: '250ms' }}
         >
           <CardContent className='space-y-2 p-5'>
-            <h3 className='text-muted-foreground text-sm font-semibold tracking-wide uppercase'>
-              비고
-            </h3>
+            <h2 className='text-xl font-bold'>비고</h2>
             <p className='text-base'>{session.note}</p>
           </CardContent>
         </Card>
