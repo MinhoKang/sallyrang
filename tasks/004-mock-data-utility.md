@@ -102,11 +102,23 @@ Phase 3 Notion API 연동 전까지 사용할 더미 데이터 유틸리티를 �
 
 ## 변경 사항 요약
 
-> 작업 완료 후 작성
+✅ **작업 완료**
+
+### 생성된 파일
+- `src/lib/mock-data.ts` - 더미 데이터 유틸리티 (mockMember, mockSessions, mockSessionDetail)
+
+### 구현 내용
+- ✅ mockMember: 김샐리 회원 데이터 (D+62일째)
+- ✅ mockSessions: 6개의 다양한 수업 기록 (2025-01-20 ~ 2025-01-31)
+- ✅ mockSessionDetail: 수업 상세 데이터 with 9개 Notion 블록
+  - HEADING_2, PARAGRAPH, BULLETED_LIST_ITEM, HEADING_3, IMAGE, CALLOUT 블록 포함
+  - Rich Text 스타일 (Bold, Italic, Link) 적용
+- ✅ 모든 타입이 `domain.ts`와 정확히 일치
+- ✅ TypeScript strict 모드 준수 (NotionBlockType enum import 수정)
 
 ---
 
-**작업 상태:** ⏳ 대기 중
+**작업 상태:** ✅ 완료
 **우선순위:** ⭐ 최우선 (Phase 2의 모든 작업 기반)
 **생성일:** 2026.02.01
-**완료일:**
+**완료일:** 2026.02.01

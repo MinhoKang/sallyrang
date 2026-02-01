@@ -70,30 +70,31 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
   - 다크/라이트 모드 전환 기능 정상 작동
   - 모든 페이지 라우트 골격 완성
 
-### Phase 2: UI/UX 완성 - 더미 데이터 활용 (2-3일) 🔄 진행 예정
+### Phase 2: UI/UX 완성 - 더미 데이터 활용 (2-3일) ✅ 완료
 
-- [ ] **Task 004: 공통 컴포넌트 라이브러리 구현** ⭐ 우선순위
+- [x] **Task 004: 공통 컴포넌트 라이브러리 구현** ✅
+  - See: `/tasks/004-mock-data-utility.md`
   - 필수 shadcn/ui 컴포넌트 확인 (Button, Card, Badge, Separator 등)
   - 추가 필요 컴포넌트 설치 (Avatar, Skeleton 등)
-  - 더미 데이터 생성 유틸리티 작성 (`src/lib/mock-data.ts`)
+  - 더미 데이터 생성 유틸리티 작성 (`src/lib/mock-data.ts`) - 완료
 
-- [ ] **Task 005: 도메인 컴포넌트 구현**
-  - `MemberProfileCard`: 회원 정보 표시 컴포넌트
-  - `SessionHistoryList`: 수업 리스트 표시 컴포넌트
-  - `SessionHistoryItem`: 개별 수업 카드 컴포넌트
-  - `SessionDetailHeader`: 수업 상세 헤더 컴포넌트
+- [x] **Task 005: 도메인 컴포넌트 구현** ✅
+  - `MemberProfileCard`: 회원 정보 표시 컴포넌트 - 완료
+  - `SessionHistoryList`: 수업 리스트 표시 컴포넌트 - 완료
+  - `SessionHistoryItem`: 개별 수업 카드 컴포넌트 - 완료
+  - `SessionDetailHeader`: 수업 상세 헤더 컴포넌트 - 완료
 
-- [ ] **Task 006: 회원 대시보드 UI 완성**
-  - 프로필 영역 UI 구현 (이름, D-Day 배지, 기본 정보 그리드)
-  - 수업 리스트 영역 UI 구현
-  - TOSS UI 스타일 적용 (타이포그래피, 여백, 색상)
-  - 반응형 레이아웃 구현
+- [x] **Task 006: 회원 대시보드 UI 완성** ✅
+  - 프로필 영역 UI 구현 (이름, D-Day 배지, 기본 정보 그리드) - 완료
+  - 수업 리스트 영역 UI 구현 - 완료
+  - TOSS UI 스타일 적용 (타이포그래피, 여백, 색상) - 완료
+  - 반응형 레이아웃 구현 - 완료
 
-- [ ] **Task 007: 수업 상세 페이지 UI 완성**
-  - 헤더 UI 구현 (뒤로가기, 날짜 표시)
-  - 수업 콘텐츠 영역 UI 구현
-  - Notion 블록 렌더러 UI 골격 구현 (`NotionBlockRenderer`)
-  - 모바일 최적화 및 반응형 디자인
+- [x] **Task 007: 수업 상세 페이지 UI 완성** ✅
+  - 헤더 UI 구현 (뒤로가기, 날짜 표시) - 완료
+  - 수업 콘텐츠 영역 UI 구현 - 완료
+  - Notion 블록 렌더러 UI 골격 구현 (`NotionBlockRenderer`) - 완료
+  - 모바일 최적화 및 반응형 디자인 - 완료
 
 ### Phase 3: 핵심 기능 구현 (3-4일) ⏳ 대기
 
@@ -238,7 +239,7 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
 | Phase | 기간 | 상태 |
 | :--- | :--- | :--- |
 | Phase 1: 환경 설정 | 1-2일 | ✅ 완료 (3/3 완료) |
-| Phase 2: UI/UX 완성 | 2-3일 | 🔄 진행 예정 |
+| Phase 2: UI/UX 완성 | 2-3일 | ✅ 완료 (4/4 완료) |
 | Phase 3: 핵심 기능 | 3-4일 | ⏳ 대기 |
 | Phase 4: 통합/배포 | 2-3일 | ⏳ 대기 |
 | **총 예상 기간** | **10-14일** | - |
@@ -259,4 +260,4 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
 **문서 작성일:** 2025.01.31
 **최종 업데이트:** 2026.02.01
 **PRD 버전:** 1.0 (MVP)
-**로드맵 상태:** Phase 1 완료, Phase 2 진행 예정
+**로드맵 상태:** Phase 1-2 완료, Phase 3 대기

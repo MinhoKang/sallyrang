@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronLeft } from "lucide-react";
+import { SessionDetailHeader } from "@/components/domain/SessionDetailHeader";
+import { NotionBlockRenderer } from "@/components/domain/NotionBlockRenderer";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { mockSessionDetail } from "@/lib/mock-data";
+import { MessageSquare, Image as ImageIcon } from "lucide-react";
 
 interface SessionPageProps {
   params: Promise<{
@@ -23,51 +25,82 @@ interface SessionPageProps {
 export default async function SessionPage({ params }: SessionPageProps) {
   const { id, sessionId } = await params;
 
-  // TODO: Notion API를 통해 실제 데이터 페칭 구현
+  // TODO Phase 3: Notion API를 통해 실제 데이터 페칭 구현
   // const session = await getSession(sessionId);
 
-  // 임시 데이터 (개발 중)
-  const session = {
-    title: "250131 등운동",
-    date: "2025.01.31",
-    content: "수업 내용을 불러오는 중...",
-  };
+  // 현재는 더미 데이터 사용 (Phase 2 UI 개발)
+  const session = mockSessionDetail;
 
-  if (!session) {
+  // 세션 유효성 검증 (실제로는 Notion API 호출 결과로 판단)
+  if (!session || sessionId !== session.id) {
     notFound();
   }
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
-        <div className="container mx-auto flex h-14 items-center justify-between px-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href={`/members/${id}`}>
-              <ChevronLeft className="h-5 w-5" />
-            </Link>
-          </Button>
-          <p className="text-sm font-medium">{session.date}</p>
-          <div className="w-10" /> {/* 균형을 위한 여백 */}
-        </div>
-      </header>
+      {/* Sticky Header */}
+      <SessionDetailHeader date={session.date} title={session.title} />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="mb-8 text-3xl font-bold">{session.title}</h1>
+      <main className="container mx-auto px-4 sm:px-6 py-8 space-y-8 max-w-3xl">
+        {/* 제목 */}
+        <div className="space-y-4 animate-fade-in-up">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            {session.title}
+          </h1>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-muted-foreground">
-              Notion 블록 렌더링 영역
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Notion API 연동 후 수업 상세 내용(루틴, 피드백, 이미지 등)이 여기에 표시됩니다.
-            </p>
-          </CardContent>
-        </Card>
+          {/* 메타 정보 */}
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge
+              variant="secondary"
+              className="text-sm font-semibold px-3 py-1.5"
+            >
+              {session.sequence}회차
+            </Badge>
+
+            {session.feedback && (
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <MessageSquare className="h-4 w-4" />
+                <span>피드백 있음</span>
+              </div>
+            )}
+
+            {session.images && session.images.length > 0 && (
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <ImageIcon className="h-4 w-4" />
+                <span>{session.images.length}개</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Notion 블록 렌더링 */}
+        <NotionBlockRenderer blocks={session.blocks} />
+
+        {/* 피드백 섹션 (블록과 별도로 강조) */}
+        {session.feedback && (
+          <Card className="border-2 border-accent/30 bg-accent/5 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+            <CardContent className="p-6 space-y-3">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-accent" />
+                <h2 className="text-xl font-bold">코치 피드백</h2>
+              </div>
+              <p className="text-base leading-relaxed">{session.feedback}</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* 비고 섹션 */}
+        {session.note && (
+          <Card className="border-2 animate-fade-in-up" style={{ animationDelay: "250ms" }}>
+            <CardContent className="p-5 space-y-2">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                비고
+              </h3>
+              <p className="text-base">{session.note}</p>
+            </CardContent>
+          </Card>
+        )}
       </main>
     </div>
   );
@@ -79,12 +112,12 @@ export default async function SessionPage({ params }: SessionPageProps) {
 export async function generateMetadata({ params }: SessionPageProps) {
   const { id, sessionId } = await params;
 
-  // TODO: 실제 수업 정보 가져오기
+  // TODO Phase 3: 실제 수업 정보 가져오기
   // const session = await getSession(sessionId);
 
   return {
-    title: "수업 상세 - 샐리랑",
-    description: "운동 수업 상세 기록",
+    title: `${mockSessionDetail.title} - 샐리랑`,
+    description: `${mockSessionDetail.date} 운동 수업 상세 기록`,
     robots: "noindex, nofollow",
   };
 }
