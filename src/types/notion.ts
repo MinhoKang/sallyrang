@@ -1,6 +1,7 @@
 import type {
   PageObjectResponse,
   BlockObjectResponse,
+  RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
 /**
@@ -109,3 +110,9 @@ export interface NotionSessionPage extends PageObjectResponse {
  * Notion API의 Block 타입을 애플리케이션에서 사용하기 쉽게 재내보냅니다.
  */
 export type NotionBlock = BlockObjectResponse;
+
+/**
+ * Rich Text Item 타입 (재내보내기)
+ * Notion API의 Rich Text 아이템 타입을 애플리케이션에서 사용합니다.
+ */
+export type NotionRichTextItem = RichTextItemResponse;
