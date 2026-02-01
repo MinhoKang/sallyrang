@@ -16,6 +16,7 @@ import type {
   NotionNumber,
   NotionSelect,
   NotionRichTextItem,
+  NotionFormulaNumber,
 } from '@/types/notion';
 import { NotionBlockType } from '@/types/domain';
 
@@ -117,6 +118,17 @@ function extractNumber(numberProperty: NotionNumber): number {
 }
 
 /**
+ * Notion Number 필드에서 수식 숫자 추출
+ */
+function extractFormulaNumber(numberProperty: NotionFormulaNumber): number {
+  const formula = numberProperty.formula;
+  if (formula && 'number' in formula) {
+    return formula.number ?? 0;
+  }
+  return 0;
+}
+
+/**
  * Notion Select 필드에서 값 추출
  */
 function extractSelect(selectProperty: NotionSelect): string {
@@ -135,11 +147,11 @@ function parseMemberData(page: NotionMemberPage): Member {
     age: extractNumber(page.properties.Age) || undefined,
     experience: extractRichText(page.properties.Experience) || undefined,
     gender: extractSelect(page.properties.Gender),
-    location: extractSelect(page.properties.Location),
+    location: extractRichText(page.properties.Location),
     startDate: extractDate(page.properties.StartDate),
     status: extractSelect(page.properties.Status),
     tuition: extractNumber(page.properties.Tuition),
-    totalTuition: extractNumber(page.properties.TotalTuition),
+    totalTuition: extractFormulaNumber(page.properties.TotalTuition),
     url: page.url,
   };
 }
@@ -344,7 +356,7 @@ function parseSessionDetail(
   // Content 필드 추출 (선택사항: Content 필드가 있는 경우)
   const content =
     page.properties.Content && 'rich_text' in page.properties.Content
-      ? extractRichText(page.properties.Content as NotionRichText)
+      ? extractRichText(page.properties.Content)
       : undefined;
 
   return {
@@ -423,10 +435,12 @@ export async function getAllMembers(): Promise<Member[]> {
       database_id: NOTION_MEMBERS_DB_ID,
     });
 
-    console.log(response);
+    console.log('response', response);
 
     const pages = response.results as NotionMemberPage[];
-    return pages.map((page) => parseMemberData(page));
+    const members = pages.map((page) => parseMemberData(page));
+    console.log('members', members);
+    return members;
   } catch (error) {
     console.error('Failed to fetch all members:', error);
     throw new Error('회원 목록을 조회할 수 없습니다');
@@ -444,27 +458,12 @@ export async function getSession(sessionId: string): Promise<SessionDetail> {
       page_id: sessionId,
     })) as NotionSessionPage;
 
-    console.log(`[Notion] Fetching blocks for session ${sessionId}`);
-
     const blocksResponse = await notion.blocks.children.list({
       block_id: sessionId,
     });
 
-    console.log(`[Notion] Fetched ${blocksResponse.results.length} blocks`);
-    console.log(
-      `[Notion] Block types:`,
-      blocksResponse.results.map((b) => (b as NotionBlock).type)
-    );
-
     const blocks = blocksResponse.results as NotionBlock[];
     const sessionDetail = parseSessionDetail(page, blocks);
-
-    console.log(`[Notion] Parsed session detail:`, {
-      id: sessionDetail.id,
-      title: sessionDetail.title,
-      blocksCount: sessionDetail.blocks.length,
-      blockTypes: sessionDetail.blocks.map((b) => b.type),
-    });
 
     return sessionDetail;
   } catch (error) {

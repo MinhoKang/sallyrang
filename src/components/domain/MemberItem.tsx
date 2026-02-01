@@ -21,7 +21,10 @@ interface MemberItemProps {
  * 개별 회원 카드 컴포넌트
  * 회원 이름, 기본 정보를 표시하고 회원 페이지로 링크합니다.
  */
-export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps>) {
+export function MemberItem({
+  member,
+  layout = 'list',
+}: Readonly<MemberItemProps>) {
   const handleCopyUrl = async () => {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const memberUrl = `${baseUrl}/members/${member.id}`;
@@ -34,14 +37,26 @@ export function MemberItem({ member, layout = 'list' }: Readonly<MemberItemProps
     }
   };
 
+  console.log(member);
+
   const isListLayout = layout === 'list';
 
   return (
     <Link href={`/members/${member.id}`} className='group block'>
-      <Card className={`border-2 hover:border-primary/50 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg ${!isListLayout ? 'h-full' : ''}`}>
-        <CardContent className={isListLayout ? 'flex items-center justify-between gap-4 p-5' : 'flex flex-col gap-3 p-5 h-full'}>
+      <Card
+        className={`hover:border-primary/50 border-2 transition-all duration-300 group-hover:scale-[1.02] hover:shadow-lg ${!isListLayout ? 'h-full' : ''}`}
+      >
+        <CardContent
+          className={
+            isListLayout
+              ? 'flex items-center justify-between gap-4 p-5'
+              : 'flex h-full flex-col gap-3 p-5'
+          }
+        >
           {/* 회원 정보 */}
-          <div className={isListLayout ? 'flex-1 space-y-2' : 'w-full space-y-2'}>
+          <div
+            className={isListLayout ? 'flex-1 space-y-2' : 'w-full space-y-2'}
+          >
             {/* 이름 */}
             <h3 className='group-hover:text-primary text-lg font-bold transition-colors duration-200 sm:text-xl'>
               {member.name} ({member.gender})

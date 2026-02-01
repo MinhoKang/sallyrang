@@ -29,11 +29,17 @@ export function AdminContent({ members }: Readonly<AdminContentProps>) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-
   const setAuth = useEffectEvent((auth: boolean) => {
     setIsAuthenticated(auth);
     setIsLoading(false);
   });
+
+  const totalTuition = members.reduce(
+    (acc, member) => acc + member.totalTuition,
+    0
+  );
+
+  console.log(members);
 
   /**
    * 마운트 시 sessionStorage에서 인증 상태 확인
@@ -63,8 +69,12 @@ export function AdminContent({ members }: Readonly<AdminContentProps>) {
   // 인증됨: 회원 리스트
   return (
     <main className='container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6'>
-      {/* 로그아웃 버튼 */}
-      <div className='flex justify-end'>
+      <div className='flex justify-between'>
+        {/* 이번 달 총 수업비 */}
+        <div className='text-2xl font-bold'>
+          이번 달 총 수업비: {totalTuition.toLocaleString()}원
+        </div>
+        {/* 로그아웃 버튼 */}
         <Button variant='outline' onClick={handleLogout} className='gap-2'>
           <LogOut className='h-4 w-4' />
           로그아웃

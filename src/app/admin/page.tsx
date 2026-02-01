@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import { AdminContent } from '@/components/domain/AdminContent';
 import { getAllMembers } from '@/lib/notion';
 import { ThemeToggle } from '@/components/ui/theme-toggle';

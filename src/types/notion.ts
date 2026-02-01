@@ -51,6 +51,12 @@ export type NotionFiles = Extract<
   { type: 'files' }
 >;
 
+/** 수식 숫자 프로퍼티 타입 */
+export type NotionFormulaNumber = Extract<
+  PageObjectResponse['properties'][string],
+  { type: 'formula' }
+>;
+
 /**
  * Members DB 아이템 타입
  * Notion Members 데이터베이스의 페이지 구조를 정의합니다.
@@ -66,15 +72,15 @@ export interface NotionMemberPage extends PageObjectResponse {
     /** 성별 (남/여) */
     Gender: NotionSelect;
     /** 수업 장소 */
-    Location: NotionSelect;
+    Location: NotionRichText;
     /** 수업 목록 (관계형) */
     Sessions: NotionRelation;
     /** 등록일 */
     StartDate: NotionDate;
     /** 상태 (진행중/홀딩/종료) */
     Status: NotionSelect;
-    /** 총 수업비 */
-    TotalTuition: NotionNumber;
+    /** 총 수업비 (수식) */
+    TotalTuition: NotionFormulaNumber;
     /** 수업비 */
     Tuition: NotionNumber;
   };
