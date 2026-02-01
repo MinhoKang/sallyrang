@@ -26,75 +26,39 @@ export const mockMember: Member = {
 
 /**
  * 더미 수업 목록 데이터
- * 날짜 범위: 2025-01-20 ~ 2025-01-31
+ * 날짜 범위: 2024-10-01 ~ 2025-01-31
+ * 총 50개 세션으로 가상화 성능 테스트용으로 확장
  */
-export const mockSessions: Session[] = [
-  {
-    id: "session-001",
-    title: "250131 등운동",
-    date: "2025-01-31",
-    sequence: 10,
-    status: "완료",
-    feedback:
-      "랫풀다운 자세가 많이 좋아졌어요! 등 근육에 집중하는 감각이 생겼습니다. 다음 주부터 무게를 조금씩 올려볼게요.",
-    note: "컨디션 매우 좋음",
-    images: [
-      "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
-      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
-    ],
-  },
-  {
-    id: "session-002",
-    title: "250129 하체운동",
-    date: "2025-01-29",
-    sequence: 9,
-    status: "완료",
-    feedback:
-      "스쿼트 깊이가 좋아졌습니다. 무릎 각도와 발목 유연성이 개선되고 있어요.",
-    images: [
-      "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=800&q=80",
-    ],
-  },
-  {
-    id: "session-003",
-    title: "250127 상체운동",
-    date: "2025-01-27",
-    sequence: 8,
-    status: "완료",
-    feedback: "벤치프레스 폼 교정 완료. 가슴 근육 활성화가 잘 되고 있습니다.",
-    note: "다음 주부터 무게 증량",
-  },
-  {
-    id: "session-004",
-    title: "250124 코어 & 전신 스트레칭",
-    date: "2025-01-24",
-    sequence: 7,
-    status: "완료",
-    feedback:
-      "플랭크 유지 시간이 30초 늘었어요! 코어 안정성이 확실히 좋아졌습니다.",
-    images: [],
-  },
-  {
-    id: "session-005",
-    title: "250122 등 + 이두",
-    date: "2025-01-22",
-    sequence: 6,
-    status: "완료",
-    feedback: "데드리프트 자세가 안정적입니다. 중량 단계적으로 증가 중.",
-    note: "허리 건강 체크 필요",
-    images: [
-      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
-    ],
-  },
-  {
-    id: "session-006",
-    title: "250120 하체 집중",
-    date: "2025-01-20",
-    sequence: 5,
-    status: "완료",
-    feedback: "런지 동작이 많이 개선되었어요. 균형감 훈련 효과가 보입니다.",
-  },
+const baseSessionData = [
+  { title: "등운동", feedback: "랫풀다운 자세가 많이 좋아졌어요! 등 근육에 집중하는 감각이 생겼습니다." },
+  { title: "하체운동", feedback: "스쿼트 깊이가 좋아졌습니다. 무릎 각도와 발목 유연성이 개선되고 있어요." },
+  { title: "상체운동", feedback: "벤치프레스 폼 교정 완료. 가슴 근육 활성화가 잘 되고 있습니다." },
+  { title: "코어 & 전신 스트레칭", feedback: "플랭크 유지 시간이 30초 늘었어요! 코어 안정성이 확실히 좋아졌습니다." },
+  { title: "등 + 이두", feedback: "데드리프트 자세가 안정적입니다. 중량 단계적으로 증가 중." },
+  { title: "하체 집중", feedback: "런지 동작이 많이 개선되었어요. 균형감 훈련 효과가 보입니다." },
+  { title: "전신 운동", feedback: "전체적인 체력이 향상되고 있습니다. 꾸준함이 결과를 만들고 있어요." },
+  { title: "가슴 + 삼두", feedback: "딥스 자세가 안정적으로 변했습니다. 가슴 활성화가 좋네요." },
 ];
+
+export const mockSessions: Session[] = Array.from({ length: 50 }, (_, index) => {
+  const baseData = baseSessionData[index % baseSessionData.length];
+  const date = new Date("2025-01-31");
+  date.setDate(date.getDate() - index);
+  const dateStr = date.toISOString().split("T")[0];
+
+  return {
+    id: `session-${String(index + 1).padStart(3, "0")}`,
+    title: `${dateStr.replace(/-/g, "")} ${baseData.title}`,
+    date: dateStr,
+    sequence: 50 - index,
+    status: index % 5 === 0 ? "예정" : "완료",
+    feedback: baseData.feedback,
+    note: index % 7 === 0 ? "특별 메모" : undefined,
+    images: index % 3 === 0 ? [
+      "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
+    ] : [],
+  };
+});
 
 /**
  * 더미 수업 상세 데이터 (블록 포함)

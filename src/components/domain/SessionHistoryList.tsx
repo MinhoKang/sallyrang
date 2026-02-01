@@ -1,23 +1,38 @@
+'use client';
+
+import { useRef } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import type { Session } from '@/types/domain';
 import { SessionHistoryItem } from './SessionHistoryItem';
 
 interface SessionHistoryListProps {
-  sessions: Session[];
-  memberId: string;
+  readonly sessions: Session[];
+  readonly memberId: string;
 }
 
 /**
- * 수업 리스트 컴포넌트
- * 회원의 모든 수업 기록을 리스트로 표시합니다.
+ * 가상화된 수업 리스트 컴포넌트
+ * 대량의 수업 기록을 효율적으로 렌더링합니다.
+ * @tanstack/react-virtual을 사용하여 뷰포트 내 아이템만 렌더링
  */
 export function SessionHistoryList({
   sessions,
   memberId,
-}: SessionHistoryListProps) {
+}: Readonly<SessionHistoryListProps>) {
+  const parentRef = useRef<HTMLDivElement>(null);
+
   // 날짜 기준 최신순 정렬
   const sortedSessions = [...sessions].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+
+  // TanStack Virtual을 사용한 가상화 설정
+  const virtualizer = useVirtualizer({
+    count: sortedSessions.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 120, // 평균 아이템 높이 (Card + padding 포함)
+    overscan: 5, // 뷰포트 밖 미리 렌더링 아이템 수
+  });
 
   if (sortedSessions.length === 0) {
     return (
@@ -29,7 +44,6 @@ export function SessionHistoryList({
     );
   }
 
-  console.log(sessions);
   return (
     <section aria-labelledby='session-history-title' className='space-y-6'>
       {/* 섹션 타이틀 */}
@@ -45,16 +59,46 @@ export function SessionHistoryList({
         </span>
       </div>
 
-      {/* 수업 리스트 */}
-      <div className='space-y-3'>
-        {sortedSessions.map((session, index) => (
-          <SessionHistoryItem
-            key={session.id}
-            session={session}
-            memberId={memberId}
-            animationDelay={index * 50} // 50ms씩 지연 (staggered reveal)
-          />
-        ))}
+      {/* 가상화된 수업 리스트 */}
+      <div
+        ref={parentRef}
+        className='h-[600px] overflow-auto'
+        style={{
+          contain: 'strict',
+        }}
+      >
+        <div
+          style={{
+            height: `${virtualizer.getTotalSize()}px`,
+            width: '100%',
+            position: 'relative',
+          }}
+        >
+          {virtualizer.getVirtualItems().map((virtualItem) => {
+            const session = sortedSessions[virtualItem.index];
+            return (
+              <div
+                key={virtualItem.key}
+                data-index={virtualItem.index}
+                ref={virtualizer.measureElement}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  transform: `translateY(${virtualItem.start}px)`,
+                }}
+              >
+                <div className='pb-3 px-4'>
+                  <SessionHistoryItem
+                    session={session}
+                    memberId={memberId}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
