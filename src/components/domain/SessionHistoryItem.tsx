@@ -26,8 +26,6 @@ export function SessionHistoryItem({
   const formattedDate = formatDate(session.date);
   const isCompleted = session.status === '완료';
 
-  console.log(session);
-
   return (
     <Link
       href={`/members/${memberId}/sessions/${session.id}`}

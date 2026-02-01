@@ -323,6 +323,11 @@ function parseSessionDetail(
   page: NotionSessionPage,
   blocks: NotionBlock[]
 ): SessionDetail {
+  // Content 필드 추출 (선택사항: Content 필드가 있는 경우)
+  const content = (page.properties.Content && 'rich_text' in page.properties.Content)
+    ? extractRichText(page.properties.Content as NotionRichText)
+    : undefined;
+
   return {
     id: page.id,
     title: extractTitleText(page.properties.Title),
@@ -333,6 +338,7 @@ function parseSessionDetail(
     note: extractRichText(page.properties.Note) || undefined,
     images: [],
     blocks: parseBlocksData(blocks),
+    content: content,
   };
 }
 
@@ -419,12 +425,26 @@ export async function getSession(sessionId: string): Promise<SessionDetail> {
       page_id: sessionId,
     })) as NotionSessionPage;
 
+    console.log(`[Notion] Fetching blocks for session ${sessionId}`);
+
     const blocksResponse = await notion.blocks.children.list({
       block_id: sessionId,
     });
 
+    console.log(`[Notion] Fetched ${blocksResponse.results.length} blocks`);
+    console.log(`[Notion] Block types:`, blocksResponse.results.map(b => (b as NotionBlock).type));
+
     const blocks = blocksResponse.results as NotionBlock[];
-    return parseSessionDetail(page, blocks);
+    const sessionDetail = parseSessionDetail(page, blocks);
+
+    console.log(`[Notion] Parsed session detail:`, {
+      id: sessionDetail.id,
+      title: sessionDetail.title,
+      blocksCount: sessionDetail.blocks.length,
+      blockTypes: sessionDetail.blocks.map(b => b.type),
+    });
+
+    return sessionDetail;
   } catch (error) {
     console.error(`Failed to fetch session ${sessionId}:`, error);
     throw new Error(`수업 상세 정보를 조회할 수 없습니다: ${sessionId}`);

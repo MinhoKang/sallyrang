@@ -55,8 +55,10 @@ export interface Session {
  * 수업 정보와 함께 Notion 블록 데이터를 포함합니다.
  */
 export interface SessionDetail extends Session {
-  /** Notion 블록 데이터 */
+  /** Notion 블록 데이터 (페이지 본문) */
   blocks: NotionBlockData[];
+  /** Content 필드 (Rich Text property에서 파싱) */
+  content?: string;
 }
 
 /**

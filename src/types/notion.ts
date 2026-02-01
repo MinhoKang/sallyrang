@@ -90,6 +90,8 @@ export interface NotionSessionPage extends PageObjectResponse {
     Title: NotionTitle;
     /** 수업 날짜 */
     Date: NotionDate;
+    /** 수업 내용 (선택사항) */
+    Content?: NotionRichText;
     /** 피드백 */
     Feedback: NotionRichText;
     /** 수업 사진 */

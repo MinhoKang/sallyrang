@@ -67,6 +67,15 @@ function RichText({ segments }: { segments: RichTextSegment[] }) {
  * Notion 블록 데이터를 React 컴포넌트로 변환합니다.
  */
 export function NotionBlockRenderer({ blocks }: NotionBlockRendererProps) {
+  // 블록이 없는 경우
+  if (!blocks || blocks.length === 0) {
+    return (
+      <div className="py-8 px-4 rounded-lg bg-muted/30 text-center text-muted-foreground">
+        <p className="text-sm">아직 작성된 내용이 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
       {blocks.map((block, blockIndex) => {
