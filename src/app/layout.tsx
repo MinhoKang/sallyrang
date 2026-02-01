@@ -9,15 +9,13 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
   ),
 
-  title: '샐리랑 - Notion 기반 PT 운동 기록 서비스',
-  description:
-    '코치는 Notion에서 작성만, 회원은 링크 클릭 한 번으로 운동 기록 확인',
+  title: '샐리랑 - 운동 기록 서비스',
+  description: '샐리와 함께하는 우당탕탕 운동 여정',
 
   // Open Graph 메타데이터
   openGraph: {
-    title: '샐리랑 - Notion 기반 PT 운동 기록 서비스',
-    description:
-      '코치는 Notion에서 작성만, 회원은 링크 클릭 한 번으로 운동 기록 확인',
+    title: '샐리랑 - 운동 기록 서비스',
+    description: '샐리와 함께하는 우당탕탕 운동 여정',
     siteName: '샐리랑',
     locale: 'ko_KR',
     type: 'website',
@@ -34,9 +32,8 @@ export const metadata: Metadata = {
   // Twitter Card 메타데이터
   twitter: {
     card: 'summary_large_image',
-    title: '샐리랑 - Notion 기반 PT 운동 기록 서비스',
-    description:
-      '코치는 Notion에서 작성만, 회원은 링크 클릭 한 번으로 운동 기록 확인',
+    title: '샐리랑 - 운동 기록 서비스',
+    description: '샐리와 함께하는 우당탕탕 운동 여정',
     images: ['/og-image.svg'],
   },
 };
