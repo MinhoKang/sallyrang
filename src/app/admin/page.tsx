@@ -12,28 +12,23 @@ import { getAllMembers } from '@/lib/notion';
  * - 인증 후 회원 목록 조회 및 검색 기능 제공
  */
 export default async function AdminPage() {
-  try {
-    const members = await getAllMembers();
+  const members = await getAllMembers();
 
-    return (
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <header className="sticky top-0 z-20 border-b-2 bg-background/80 backdrop-blur-lg">
-          <div className="container mx-auto flex h-16 items-center justify-center px-4">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
-              관리자 대시보드 🛠️
-            </h1>
-          </div>
-        </header>
+  return (
+    <div className='bg-background min-h-screen'>
+      {/* Header */}
+      <header className='bg-background/80 sticky top-0 z-20 border-b-2 backdrop-blur-lg'>
+        <div className='container mx-auto flex h-16 items-center justify-center px-4'>
+          <h1 className='text-xl font-bold tracking-tight sm:text-2xl'>
+            관리자 대시보드 🛠️
+          </h1>
+        </div>
+      </header>
 
-        {/* Content */}
-        <AdminContent members={members} />
-      </div>
-    );
-  } catch (error) {
-    console.error('Error loading admin page:', error);
-    notFound();
-  }
+      {/* Content */}
+      <AdminContent members={members} />
+    </div>
+  );
 }
 
 /**

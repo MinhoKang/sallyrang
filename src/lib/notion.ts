@@ -1,13 +1,17 @@
-import { Client } from "@notionhq/client";
+import { Client } from '@notionhq/client';
 import type {
   Member,
   Session,
   SessionDetail,
   RichTextSegment,
   NotionBlockData,
-} from "@/types/domain";
-import type { NotionMemberPage, NotionSessionPage, NotionBlock } from "@/types/notion";
-import { NotionBlockType } from "@/types/domain";
+} from '@/types/domain';
+import type {
+  NotionMemberPage,
+  NotionSessionPage,
+  NotionBlock,
+} from '@/types/notion';
+import { NotionBlockType } from '@/types/domain';
 
 /**
  * Notion API 클라이언트 초기화
@@ -21,8 +25,8 @@ export const notion = new Client({
  * Notion Database IDs
  * Members DB와 Sessions DB의 ID를 환경 변수에서 가져옵니다.
  */
-export const NOTION_MEMBERS_DB_ID = process.env.NOTION_MEMBERS_DB_ID || "";
-export const NOTION_SESSIONS_DB_ID = process.env.NOTION_SESSIONS_DB_ID || "";
+export const NOTION_MEMBERS_DB_ID = process.env.NOTION_MEMBERS_DB_ID || '';
+export const NOTION_SESSIONS_DB_ID = process.env.NOTION_SESSIONS_DB_ID || '';
 
 /**
  * Rich Text 배열을 RichTextSegment[] 로 변환
@@ -46,7 +50,7 @@ function parseRichText(
   }>
 ): RichTextSegment[] {
   return richTextArray.map((richText) => {
-    const textContent = richText.text?.content || richText.plain_text || "";
+    const textContent = richText.text?.content || richText.plain_text || '';
     const href = richText.text?.link?.url || richText.href || undefined;
 
     const styles = {
@@ -70,7 +74,7 @@ function parseRichText(
  */
 function extractTitleText(titleProperty: any): string {
   const titleArray = titleProperty.title || [];
-  return titleArray.map((t: any) => t.plain_text || "").join("");
+  return titleArray.map((t: any) => t.plain_text || '').join('');
 }
 
 /**
@@ -78,14 +82,14 @@ function extractTitleText(titleProperty: any): string {
  */
 function extractRichText(richTextProperty: any): string {
   const richTextArray = richTextProperty.rich_text || [];
-  return richTextArray.map((t: any) => t.plain_text || "").join("");
+  return richTextArray.map((t: any) => t.plain_text || '').join('');
 }
 
 /**
  * Notion Date 필드에서 날짜 추출
  */
 function extractDate(dateProperty: any): string {
-  return dateProperty.date?.start || "";
+  return dateProperty.date?.start || '';
 }
 
 /**
@@ -99,7 +103,7 @@ function extractNumber(numberProperty: any): number {
  * Notion Select 필드에서 값 추출
  */
 function extractSelect(selectProperty: any): string {
-  return selectProperty.select?.name || "";
+  return selectProperty.select?.name || '';
 }
 
 /**
@@ -114,11 +118,12 @@ function parseMemberData(page: NotionMemberPage): Member {
     age: extractNumber(page.properties.Age) || undefined,
     experience: extractRichText(page.properties.Experience) || undefined,
     gender: extractSelect(page.properties.Gender),
-    location: extractSelect(page.properties.Location),
+    location: extractRichText(page.properties.Location),
     startDate: extractDate(page.properties.StartDate),
     status: extractSelect(page.properties.Status),
     tuition: extractNumber(page.properties.Tuition),
     totalTuition: extractNumber(page.properties.TotalTuition),
+    url: page.url,
   };
 }
 
@@ -151,7 +156,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
       const baseId = block.id;
 
       // 블록 타입별 처리
-      if (block.type === "paragraph") {
+      if (block.type === 'paragraph') {
         const paragraph = (block as any).paragraph;
         return {
           id: baseId,
@@ -160,7 +165,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "heading_1") {
+      if (block.type === 'heading_1') {
         const heading = (block as any).heading_1;
         return {
           id: baseId,
@@ -169,7 +174,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "heading_2") {
+      if (block.type === 'heading_2') {
         const heading = (block as any).heading_2;
         return {
           id: baseId,
@@ -178,7 +183,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "heading_3") {
+      if (block.type === 'heading_3') {
         const heading = (block as any).heading_3;
         return {
           id: baseId,
@@ -187,7 +192,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "bulleted_list_item") {
+      if (block.type === 'bulleted_list_item') {
         const listItem = (block as any).bulleted_list_item;
         return {
           id: baseId,
@@ -196,7 +201,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "numbered_list_item") {
+      if (block.type === 'numbered_list_item') {
         const listItem = (block as any).numbered_list_item;
         return {
           id: baseId,
@@ -205,12 +210,12 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "image") {
+      if (block.type === 'image') {
         const image = (block as any).image;
         const imageUrl =
-          image.type === "external"
+          image.type === 'external'
             ? image.external?.url
-            : image.type === "file"
+            : image.type === 'file'
               ? image.file?.url
               : null;
 
@@ -220,12 +225,12 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
           content: [],
           imageUrl: imageUrl || undefined,
           caption:
-            image.caption?.map((c: any) => c.plain_text || "").join("") ||
+            image.caption?.map((c: any) => c.plain_text || '').join('') ||
             undefined,
         };
       }
 
-      if (block.type === "callout") {
+      if (block.type === 'callout') {
         const callout = (block as any).callout;
         return {
           id: baseId,
@@ -234,7 +239,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "code") {
+      if (block.type === 'code') {
         const code = (block as any).code;
         return {
           id: baseId,
@@ -244,7 +249,7 @@ function parseBlocksData(blocks: NotionBlock[]): NotionBlockData[] {
         };
       }
 
-      if (block.type === "toggle") {
+      if (block.type === 'toggle') {
         const toggle = (block as any).toggle;
         return {
           id: baseId,
@@ -287,7 +292,6 @@ function parseSessionDetail(
  */
 export const revalidate = 3600;
 
-
 /**
  * 회원 정보 조회
  * @param memberId - Notion 회원 페이지 ID
@@ -315,15 +319,15 @@ export async function getSessions(memberId: string): Promise<Session[]> {
     const response = await notion.databases.query({
       database_id: NOTION_SESSIONS_DB_ID,
       filter: {
-        property: "Member",
+        property: 'Member',
         relation: {
           contains: memberId,
         },
       },
       sorts: [
         {
-          property: "Date",
-          direction: "descending",
+          property: 'Date',
+          direction: 'descending',
         },
       ],
     });
@@ -342,16 +346,17 @@ export async function getSessions(memberId: string): Promise<Session[]> {
  */
 export async function getAllMembers(): Promise<Member[]> {
   try {
-    // @ts-ignore - Notion API 타입 정의 미포함 (v4)
     const response = await notion.databases.query({
       database_id: NOTION_MEMBERS_DB_ID,
     });
 
+    console.log(response);
+
     const pages = response.results as NotionMemberPage[];
     return pages.map((page) => parseMemberData(page));
   } catch (error) {
-    console.error("Failed to fetch all members:", error);
-    throw new Error("회원 목록을 조회할 수 없습니다");
+    console.error('Failed to fetch all members:', error);
+    throw new Error('회원 목록을 조회할 수 없습니다');
   }
 }
 

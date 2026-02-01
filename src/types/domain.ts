@@ -23,6 +23,8 @@ export interface Member {
   tuition: number;
   /** 총 수업비 */
   totalTuition: number;
+  /** Notion 페이지 URL */
+  url: string;
 }
 
 /**
@@ -63,25 +65,25 @@ export interface SessionDetail extends Session {
  */
 export enum NotionBlockType {
   /** 일반 단락 */
-  PARAGRAPH = "paragraph",
+  PARAGRAPH = 'paragraph',
   /** 제목 1 */
-  HEADING_1 = "heading_1",
+  HEADING_1 = 'heading_1',
   /** 제목 2 */
-  HEADING_2 = "heading_2",
+  HEADING_2 = 'heading_2',
   /** 제목 3 */
-  HEADING_3 = "heading_3",
+  HEADING_3 = 'heading_3',
   /** 순서 없는 리스트 아이템 */
-  BULLETED_LIST_ITEM = "bulleted_list_item",
+  BULLETED_LIST_ITEM = 'bulleted_list_item',
   /** 순서 있는 리스트 아이템 */
-  NUMBERED_LIST_ITEM = "numbered_list_item",
+  NUMBERED_LIST_ITEM = 'numbered_list_item',
   /** 이미지 */
-  IMAGE = "image",
+  IMAGE = 'image',
   /** 콜아웃 (강조 박스) */
-  CALLOUT = "callout",
+  CALLOUT = 'callout',
   /** 토글 (접기/펼치기) */
-  TOGGLE = "toggle",
+  TOGGLE = 'toggle',
   /** 코드 블록 */
-  CODE = "code",
+  CODE = 'code',
 }
 
 /**

@@ -1,12 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useEffectEvent } from 'react';
 import { toast } from 'sonner';
 import type { Member } from '@/types/domain';
 import { AdminPasswordForm } from './AdminPasswordForm';
 import { MemberSearchList } from './MemberSearchList';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
+
+/**
+ * 로그아웃 핸들러
+ */
+function handleLogout() {
+  sessionStorage.removeItem('adminAuth');
+  toast.success('로그아웃되었습니다');
+  window.location.reload();
+}
 
 interface AdminContentProps {
   readonly members: Member[];
@@ -20,31 +29,27 @@ export function AdminContent({ members }: Readonly<AdminContentProps>) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+
+  const setAuth = useEffectEvent((auth: boolean) => {
+    setIsAuthenticated(auth);
+    setIsLoading(false);
+  });
+
   /**
    * 마운트 시 sessionStorage에서 인증 상태 확인
    */
   useEffect(() => {
     const auth = sessionStorage.getItem('adminAuth') === 'true';
-    setIsAuthenticated(auth);
-    setIsLoading(false);
+    setAuth(auth);
   }, []);
-
-  /**
-   * 로그아웃 핸들러
-   */
-  function handleLogout() {
-    sessionStorage.removeItem('adminAuth');
-    toast.success('로그아웃되었습니다');
-    window.location.reload();
-  }
 
   // 로딩 중
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary mx-auto" />
-          <p className="text-muted-foreground">로딩 중...</p>
+      <div className='flex min-h-screen items-center justify-center'>
+        <div className='space-y-4 text-center'>
+          <div className='border-muted border-t-primary mx-auto h-8 w-8 animate-spin rounded-full border-4' />
+          <p className='text-muted-foreground'>로딩 중...</p>
         </div>
       </div>
     );
@@ -57,15 +62,11 @@ export function AdminContent({ members }: Readonly<AdminContentProps>) {
 
   // 인증됨: 회원 리스트
   return (
-    <main className="container mx-auto px-4 sm:px-6 py-8 space-y-8 max-w-4xl">
+    <main className='container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6'>
       {/* 로그아웃 버튼 */}
-      <div className="flex justify-end">
-        <Button
-          variant="outline"
-          onClick={handleLogout}
-          className="gap-2"
-        >
-          <LogOut className="h-4 w-4" />
+      <div className='flex justify-end'>
+        <Button variant='outline' onClick={handleLogout} className='gap-2'>
+          <LogOut className='h-4 w-4' />
           로그아웃
         </Button>
       </div>
