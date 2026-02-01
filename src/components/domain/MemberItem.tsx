@@ -68,9 +68,7 @@ export function MemberItem({
                 <span className='font-medium'>{member.age}세 •</span>
               )}
 
-              <span className='font-medium'>{member.location}</span>
-
-              <span className='text-xs'>•</span>
+              <span className='font-medium'>{member.location} •</span>
 
               <span
                 className={
