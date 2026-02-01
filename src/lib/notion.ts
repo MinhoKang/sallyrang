@@ -337,6 +337,25 @@ export async function getSessions(memberId: string): Promise<Session[]> {
 }
 
 /**
+ * 모든 회원 목록 조회
+ * @returns 전체 회원 목록 배열 (관리자용)
+ */
+export async function getAllMembers(): Promise<Member[]> {
+  try {
+    // @ts-ignore - Notion API 타입 정의 미포함 (v4)
+    const response = await notion.databases.query({
+      database_id: NOTION_MEMBERS_DB_ID,
+    });
+
+    const pages = response.results as NotionMemberPage[];
+    return pages.map((page) => parseMemberData(page));
+  } catch (error) {
+    console.error("Failed to fetch all members:", error);
+    throw new Error("회원 목록을 조회할 수 없습니다");
+  }
+}
+
+/**
  * 특정 수업 상세 정보 조회
  * @param sessionId - Notion 수업 페이지 ID
  * @returns 수업 상세 정보 객체 (블록 포함)
