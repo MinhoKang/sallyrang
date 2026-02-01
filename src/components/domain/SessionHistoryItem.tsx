@@ -46,9 +46,9 @@ export function SessionHistoryItem({
               {formattedDate}
             </time>
 
-            {/* 제목 */}
+            {/* 회차 */}
             <h3 className='group-hover:text-primary text-lg font-bold transition-colors duration-200 sm:text-xl'>
-              {session.title}
+              {session.sequence}회차 수업
             </h3>
 
             {/* 상태 배지 */}
@@ -64,11 +64,6 @@ export function SessionHistoryItem({
                   <span>{session.status}</span>
                 </div>
               )}
-
-              {/* 회차 번호 */}
-              <span className='text-muted-foreground bg-muted rounded-md px-2 py-0.5 text-xs font-semibold'>
-                {session.sequence}회차
-              </span>
             </div>
           </div>
 

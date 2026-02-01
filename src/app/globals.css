@@ -97,49 +97,53 @@
 }
 
 .dark {
-  /* 다크 모드: 깊은 네이비 배경 */
-  --background: oklch(0.12 0.02 240);
-  --foreground: oklch(0.95 0 0);
+  /* 다크 모드: 극대 명확성을 위한 진검정 배경 (중년층 시력 고려) */
+  --background: oklch(0.08 0.01 240);
+  --foreground: oklch(0.98 0.01 240);
 
-  --card: oklch(0.18 0.02 240);
-  --card-foreground: oklch(0.95 0 0);
+  /* 카드: 어두운 회색으로 배경과 구분 (명확한 경계) */
+  --card: oklch(0.15 0.02 240);
+  --card-foreground: oklch(0.98 0.01 240);
 
-  --popover: oklch(0.18 0.02 240);
-  --popover-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.15 0.02 240);
+  --popover-foreground: oklch(0.98 0.01 240);
 
-  /* Primary: 밝은 블루 */
-  --primary: oklch(0.65 0.2 240);
-  --primary-foreground: oklch(0.12 0.02 240);
+  /* Primary: 높은 채도의 밝은 파랑 (WCAG AAA 대비) */
+  --primary: oklch(0.70 0.22 240);
+  --primary-foreground: oklch(0.08 0.01 240);
 
-  --secondary: oklch(0.22 0.02 240);
-  --secondary-foreground: oklch(0.95 0 0);
+  /* Secondary: 중간 회색으로 명확한 구분 */
+  --secondary: oklch(0.25 0.01 240);
+  --secondary-foreground: oklch(0.98 0.01 240);
 
-  --muted: oklch(0.22 0.02 240);
-  --muted-foreground: oklch(0.65 0 0);
+  /* Muted: 보조 텍스트용 밝은 회색 */
+  --muted: oklch(0.25 0.01 240);
+  --muted-foreground: oklch(0.75 0 0);
 
-  /* Accent: 밝은 민트 */
-  --accent: oklch(0.3 0.08 165);
-  --accent-foreground: oklch(0.95 0 0);
+  /* Accent: 높은 채도의 밝은 민트 (성취감 강조) */
+  --accent: oklch(0.78 0.15 165);
+  --accent-foreground: oklch(0.08 0.01 240);
 
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.65 0.2 240);
+  /* 위험: 명확한 빨강 */
+  --destructive: oklch(0.62 0.28 29);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.70 0.22 240);
 
-  --chart-1: oklch(0.65 0.2 240);
-  --chart-2: oklch(0.7 0.15 165);
-  --chart-3: oklch(0.6 0.12 200);
-  --chart-4: oklch(0.7 0.15 280);
-  --chart-5: oklch(0.65 0.18 140);
+  --chart-1: oklch(0.70 0.22 240);
+  --chart-2: oklch(0.75 0.18 165);
+  --chart-3: oklch(0.72 0.16 200);
+  --chart-4: oklch(0.78 0.14 280);
+  --chart-5: oklch(0.75 0.20 140);
 
-  --sidebar: oklch(0.18 0.02 240);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.65 0.2 240);
-  --sidebar-primary-foreground: oklch(0.12 0.02 240);
-  --sidebar-accent: oklch(0.22 0.02 240);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.65 0.2 240);
+  --sidebar: oklch(0.15 0.02 240);
+  --sidebar-foreground: oklch(0.98 0.01 240);
+  --sidebar-primary: oklch(0.70 0.22 240);
+  --sidebar-primary-foreground: oklch(0.08 0.01 240);
+  --sidebar-accent: oklch(0.25 0.01 240);
+  --sidebar-accent-foreground: oklch(0.98 0.01 240);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.70 0.22 240);
 }
 
 @layer base {
@@ -201,11 +205,16 @@
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    background: oklch(1 0 0 / 0.2);
+    background: oklch(1 0 0 / 0.4);
   }
 
   .dark ::-webkit-scrollbar-thumb:hover {
-    background: oklch(1 0 0 / 0.3);
+    background: oklch(1 0 0 / 0.6);
+  }
+
+  /* 다크모드 스크롤바 트랙 명확성 향상 */
+  .dark ::-webkit-scrollbar-track {
+    background: oklch(0.15 0.02 240);
   }
 }
 

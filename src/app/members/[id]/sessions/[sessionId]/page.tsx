@@ -30,14 +30,12 @@ export default async function SessionPage({ params }: SessionPageProps) {
   const session = await getSession(sessionId);
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background">
       {/* Sticky Header - 즉시 표시 */}
-      {session && (
-        <SessionDetailHeader date={session.date} title={session.title} />
-      )}
+      {session && <SessionDetailHeader date={session.date} />}
 
       {/* Main Content - Suspense로 독립적 스트리밍 */}
-      <main className="container mx-auto max-w-3xl space-y-8 px-4 py-8 sm:px-6">
+      <main className="container mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <Suspense fallback={<SessionContentSkeleton />}>
           <SessionContent sessionId={sessionId} />
         </Suspense>

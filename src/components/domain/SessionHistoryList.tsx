@@ -19,7 +19,6 @@ export function SessionHistoryList({
   sessions,
   memberId,
 }: Readonly<SessionHistoryListProps>) {
-  console.log('sessions', sessions);
   const parentRef = useRef<HTMLDivElement>(null);
 
   // 날짜 기준 최신순 정렬

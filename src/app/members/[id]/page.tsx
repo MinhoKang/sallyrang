@@ -1,10 +1,11 @@
-import { Suspense } from "react";
-import { getMember } from "@/lib/notion";
-import { Separator } from "@/components/ui/separator";
-import { MemberProfile } from "@/components/domain/async/MemberProfile";
-import { SessionList } from "@/components/domain/async/SessionList";
-import { ProfileSkeleton } from "@/components/ui/skeleton/ProfileSkeleton";
-import { SessionListSkeleton } from "@/components/ui/skeleton/SessionListSkeleton";
+import { Suspense } from 'react';
+import { getMember } from '@/lib/notion';
+import { Separator } from '@/components/ui/separator';
+import { MemberProfile } from '@/components/domain/async/MemberProfile';
+import { SessionList } from '@/components/domain/async/SessionList';
+import { ProfileSkeleton } from '@/components/ui/skeleton/ProfileSkeleton';
+import { SessionListSkeleton } from '@/components/ui/skeleton/SessionListSkeleton';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 interface MemberPageProps {
   params: Promise<{
@@ -26,25 +27,29 @@ export default async function MemberPage({ params }: MemberPageProps) {
   const { id } = await params;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className='bg-background min-h-screen'>
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b-2 bg-background/80 backdrop-blur-lg">
-        <div className="container mx-auto flex h-16 items-center justify-center px-4">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+      <header className='bg-background/80 sticky top-0 z-20 border-b-2 backdrop-blur-lg'>
+        <div className='container mx-auto flex h-16 items-center justify-between px-4'>
+          {/* 로고 */}
+          <h1 className='mx-auto text-xl font-bold tracking-tight sm:text-2xl'>
             샐리랑 💪
           </h1>
+
+          {/* 테마 토글 버튼 */}
+          <ThemeToggle />
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 py-8 space-y-8 max-w-4xl">
+      <main className='container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6'>
         {/* 프로필 영역 - Suspense로 독립적 스트리밍 */}
         <Suspense fallback={<ProfileSkeleton />}>
           <MemberProfile id={id} />
         </Suspense>
 
         {/* 구분선 */}
-        <Separator className="my-8" />
+        <Separator className='my-8' />
 
         {/* 수업 리스트 영역 - Suspense로 독립적 스트리밍 */}
         <Suspense fallback={<SessionListSkeleton />}>
@@ -67,18 +72,18 @@ export async function generateMetadata({ params }: MemberPageProps) {
     return {
       title: `${member.name}님의 운동 기록 - 샐리랑`,
       description: `${member.name}님의 개인 PT 운동 기록을 확인하세요`,
-      robots: "noindex, nofollow", // 개인 정보 보호
+      robots: 'noindex, nofollow', // 개인 정보 보호
 
       // Open Graph 메타데이터
       openGraph: {
         title: `${member.name}님의 운동 기록`,
         description: `${member.name}님의 개인 PT 운동 기록`,
-        siteName: "샐리랑",
-        locale: "ko_KR",
-        type: "profile",
+        siteName: '샐리랑',
+        locale: 'ko_KR',
+        type: 'profile',
         images: [
           {
-            url: "/og-image.svg",
+            url: '/og-image.svg',
             width: 1200,
             height: 630,
             alt: `${member.name}님의 운동 기록`,
@@ -88,17 +93,17 @@ export async function generateMetadata({ params }: MemberPageProps) {
 
       // Twitter Card 메타데이터
       twitter: {
-        card: "summary",
+        card: 'summary',
         title: `${member.name}님의 운동 기록`,
         description: `${member.name}님의 개인 PT 운동 기록`,
-        images: ["/og-image.svg"],
+        images: ['/og-image.svg'],
       },
     };
   } catch {
     return {
-      title: "운동 기록 - 샐리랑",
-      description: "개인 운동 기록 열람 서비스",
-      robots: "noindex, nofollow",
+      title: '운동 기록 - 샐리랑',
+      description: '개인 운동 기록 열람 서비스',
+      robots: 'noindex, nofollow',
     };
   }
 }

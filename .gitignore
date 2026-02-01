@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# shrimp  
+shrimp_data/
+
+# playwright
+playwright-report/
+test-results/
+.playwright-mcp/

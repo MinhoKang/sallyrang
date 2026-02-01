@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { AdminContent } from '@/components/domain/AdminContent';
 import { getAllMembers } from '@/lib/notion';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 /**
  * 관리자 대시보드 페이지 (Server Component)
@@ -18,10 +19,11 @@ export default async function AdminPage() {
     <div className='bg-background min-h-screen'>
       {/* Header */}
       <header className='bg-background/80 sticky top-0 z-20 border-b-2 backdrop-blur-lg'>
-        <div className='container mx-auto flex h-16 items-center justify-center px-4'>
+        <div className='container mx-auto flex h-16 items-center justify-between px-4'>
           <h1 className='text-xl font-bold tracking-tight sm:text-2xl'>
             관리자 대시보드 🛠️
           </h1>
+          <ThemeToggle />
         </div>
       </header>
 
