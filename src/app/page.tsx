@@ -1,13 +1,5 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -21,9 +13,17 @@ export default function Home() {
         <div className='max-w-2xl text-center'>
           <h1 className='mb-4 text-5xl font-bold tracking-tight'>샐리랑</h1>
           <p className='text-muted-foreground mb-8 text-xl'>
-            Notion을 활용한 PT 운동 기록 열람 서비스
+            샐리와 함께하는 우당탕탕 운동 여정
           </p>
         </div>
+        {/* Sally 캐릭터 이미지  */}
+        <Image
+          src='/images/characters/sally-removebg-preview.png'
+          alt='Sally'
+          width={500}
+          height={500}
+          className='rounded-lg'
+        />
       </main>
     </div>
   );
