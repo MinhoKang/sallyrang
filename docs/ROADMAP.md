@@ -131,25 +131,40 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
   - 더미 데이터 코드 제거 - 완료
   - 에러 처리 및 404 페이지 검증 - 완료
 
-### Phase 4: 통합, 테스트 및 배포 (2-3일) ⏳ 대기
+### Phase 4: 통합, 테스트 및 배포 (2-3일) 🚧 진행 중
 
-- [ ] **Task 013: 에러 처리 및 로딩 상태 완성**
-  - `error.tsx` 컴포넌트 스타일링
-  - `loading.tsx` 컴포넌트 스타일링 (Skeleton UI)
-  - 404 Not Found 페이지 구현
-  - 에러 바운더리 테스트
+- [x] **Task 013: 에러 처리 및 로딩 상태 완성** ✅
+  - `error.tsx` 컴포넌트 스타일링 - 완료
+  - `loading.tsx` 컴포넌트 스타일링 (Skeleton UI) - 완료
+  - 404 Not Found 페이지 구현 - 완료
+  - 에러 바운더리 테스트 - 완료
 
-- [ ] **Task 014: SEO 및 메타데이터 설정**
-  - `generateMetadata` 함수 구현 (동적 메타데이터)
-  - robots 메타 태그 설정 (noindex, nofollow)
-  - Open Graph 메타데이터 설정
+- [x] **Task 014: SEO 및 메타데이터 설정** ✅
+  - See: `/tasks/014-seo-metadata.md`
+  - Open Graph 이미지 생성 (og-image.svg) - 완료
+  - `metadataBase` 설정 및 경고 해결 - 완료
+  - 동적 메타데이터 개선 (회원 대시보드, 수업 상세) - 완료
+  - robots 메타 태그 유지 (noindex, nofollow) - 완료
+  - Twitter Card 메타데이터 추가 - 완료
 
-- [ ] **Task 015: 성능 최적화**
-  - 이미지 최적화 (Next.js Image 컴포넌트)
-  - ISR 캐싱 전략 최종 검토
-  - Lighthouse 성능 측정 및 개선
+- [x] **Task 015: 성능 최적화** ✅
+  - See: `/tasks/015-performance-optimization.md`
+  - Notion 이미지 도메인 설정 (next.config.ts) - 완료
+  - 이미지 최적화 (priority, lazy loading, blur placeholder) - 완료
+  - 환경 변수 설정 (NEXT_PUBLIC_BASE_URL) - 완료
+  - .env.example 파일 생성 - 완료
+  - 성능 최적화 문서 작성 (docs/PERFORMANCE.md) - 완료
+  - ISR 캐싱 전략 검토 (1시간 유지) - 완료
 
-- [ ] **Task 016: Vercel 배포**
+- [x] **Task 016: Suspense 및 폰트 최적화** ✅
+  - Suspense 기반 점진적 렌더링 구현 - 완료
+  - 비동기 서버 컴포넌트 분리 (MemberProfile, SessionList, SessionContent) - 완료
+  - 스켈레톤 UI 컴포넌트 생성 (ProfileSkeleton, SessionListSkeleton, SessionContentSkeleton) - 완료
+  - 폰트 최적화 (DNS prefetch, preconnect) - 완료
+  - 성능 개선 문서 작성 (docs/SUSPENSE_OPTIMIZATION.md) - 완료
+  - 빌드 검증 및 테스트 - 완료
+
+- [ ] **Task 017: Vercel 배포**
   - 환경 변수 설정 (Vercel Dashboard)
   - 프로덕션 배포
   - 프로덕션 환경 테스트
@@ -243,7 +258,7 @@ Notion을 CMS로 활용하여 PT 코치가 관리하는 운동 기록을 회원�
 | Phase 1: 환경 설정 | 1-2일 | ✅ 완료 (3/3 완료) |
 | Phase 2: UI/UX 완성 | 2-3일 | ✅ 완료 (4/4 완료) |
 | Phase 3: 핵심 기능 | 3-4일 | ✅ 완료 (5/5 완료) |
-| Phase 4: 통합/배포 | 2-3일 | ⏳ 대기 |
+| Phase 4: 통합/배포 | 2-3일 | 🚧 진행 중 (4/5 완료) |
 | **총 예상 기간** | **10-14일** | - |
 
 ---

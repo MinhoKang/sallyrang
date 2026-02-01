@@ -1,10 +1,10 @@
-import { notFound } from 'next/navigation';
-import { SessionDetailHeader } from '@/components/domain/SessionDetailHeader';
-import { NotionBlockRenderer } from '@/components/domain/NotionBlockRenderer';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { getSession } from '@/lib/notion';
-import { MessageSquare, Image as ImageIcon } from 'lucide-react';
+import { Suspense } from "react";
+import { getSession } from "@/lib/notion";
+import { SessionDetailHeader } from "@/components/domain/SessionDetailHeader";
+import { SessionContent } from "@/components/domain/async/SessionContent";
+import { SessionContentSkeleton } from "@/components/ui/skeleton/SessionContentSkeleton";
+import { NotionBlockType } from "@/types/domain";
+import type { Metadata } from "next";
 
 interface SessionPageProps {
   params: Promise<{
@@ -18,106 +18,29 @@ interface SessionPageProps {
  * URL: /members/[id]/sessions/[sessionId]
  *
  * @description
- * - Notion API를 통해 수업 상세 정보 및 블록 조회
+ * - Suspense 기반 점진적 렌더링으로 성능 최적화
+ * - 헤더는 즉시 표시, 콘텐츠는 독립적으로 스트리밍
  * - Notion 블록 렌더링 (텍스트, 제목, 이미지)
  * - 뒤로가기 버튼으로 대시보드 복귀
  */
 export default async function SessionPage({ params }: SessionPageProps) {
   const { id, sessionId } = await params;
 
+  // 메타데이터용 세션 정보 (헤더 표시에 필요)
   const session = await getSession(sessionId);
 
-  // 세션이 없으면 404 표시
-  if (!session) {
-    notFound();
-  }
-
   return (
-    <div className='bg-background min-h-screen'>
-      {/* Sticky Header */}
-      <SessionDetailHeader date={session.date} title={session.title} />
+    <div className="bg-background min-h-screen">
+      {/* Sticky Header - 즉시 표시 */}
+      {session && (
+        <SessionDetailHeader date={session.date} title={session.title} />
+      )}
 
-      {/* Main Content */}
-      <main className='container mx-auto max-w-3xl space-y-8 px-4 py-8 sm:px-6'>
-        {/* 제목 */}
-        <div className='animate-fade-in-up space-y-4'>
-          <h1 className='text-3xl font-bold tracking-tight sm:text-4xl'>
-            {session.title}
-          </h1>
-
-          {/* 메타 정보 */}
-          <div className='flex flex-wrap items-center gap-3'>
-            <Badge
-              variant='secondary'
-              className='px-3 py-1.5 text-sm font-semibold'
-            >
-              {session.sequence}회차
-            </Badge>
-
-            {session.feedback && (
-              <div className='text-muted-foreground flex items-center gap-1.5 text-sm'>
-                <MessageSquare className='h-4 w-4' />
-                <span>피드백 있음</span>
-              </div>
-            )}
-
-            {session.images && session.images.length > 0 && (
-              <div className='text-muted-foreground flex items-center gap-1.5 text-sm'>
-                <ImageIcon className='h-4 w-4' />
-                <span>{session.images.length}개</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Notion 블록 렌더링 또는 Content 텍스트 렌더링 */}
-        {session.blocks.length > 0 ? (
-          <NotionBlockRenderer blocks={session.blocks} />
-        ) : session.content ? (
-          <Card
-            className='animate-fade-in-up border-2'
-            style={{ animationDelay: '100ms' }}
-          >
-            <CardContent className='space-y-3 p-6'>
-              <p className='text-base leading-relaxed whitespace-pre-wrap'>
-                {session.content}
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <NotionBlockRenderer blocks={[]} />
-        )}
-
-        {/* 피드백 섹션 (블록과 별도로 강조) */}
-        {session.feedback && (
-          <Card
-            className='border-accent/30 bg-accent/5 animate-fade-in-up border-2'
-            style={{ animationDelay: '200ms' }}
-          >
-            <CardContent className='space-y-3 p-6'>
-              <div className='flex items-center gap-2'>
-                <MessageSquare className='text-accent h-5 w-5' />
-                <h2 className='text-xl font-bold'>코치 피드백</h2>
-              </div>
-              <p className='text-base leading-relaxed'>{session.feedback}</p>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* 비고 섹션 */}
-        {session.note && (
-          <Card
-            className='animate-fade-in-up border-2'
-            style={{ animationDelay: '250ms' }}
-          >
-            <CardContent className='space-y-2 p-5'>
-              <h3 className='text-muted-foreground text-sm font-semibold tracking-wide uppercase'>
-                비고
-              </h3>
-              <p className='text-base'>{session.note}</p>
-            </CardContent>
-          </Card>
-        )}
+      {/* Main Content - Suspense로 독립적 스트리밍 */}
+      <main className="container mx-auto max-w-3xl space-y-8 px-4 py-8 sm:px-6">
+        <Suspense fallback={<SessionContentSkeleton />}>
+          <SessionContent sessionId={sessionId} />
+        </Suspense>
       </main>
     </div>
   );
@@ -126,15 +49,48 @@ export default async function SessionPage({ params }: SessionPageProps) {
 /**
  * 동적 메타데이터 생성
  */
-export async function generateMetadata({ params }: SessionPageProps) {
-  const { id, sessionId } = await params;
+export async function generateMetadata({ params }: SessionPageProps): Promise<Metadata> {
+  const { sessionId } = await params;
 
   try {
     const session = await getSession(sessionId);
+
+    // 이미지 블록이 있으면 첫 번째 이미지 사용, 없으면 기본 이미지
+    const ogImage =
+      session.blocks.find(
+        (b) => b.type === NotionBlockType.IMAGE && b.imageUrl
+      )?.imageUrl || '/og-image.svg';
+
     return {
-      title: `${session.title} - 샐리랑`,
-      description: `${session.date} 운동 수업 상세 기록`,
-      robots: 'noindex, nofollow',
+      title: `${session.title} | ${session.date} - 샐리랑`,
+      description: `${session.date} 운동 수업 상세 기록 - ${session.sequence}회차`,
+      robots: 'noindex, nofollow', // 개인 정보 보호
+
+      // Open Graph 메타데이터
+      openGraph: {
+        title: session.title,
+        description: `${session.date} 운동 수업 - ${session.sequence}회차`,
+        siteName: '샐리랑',
+        locale: 'ko_KR',
+        type: 'article',
+        publishedTime: session.date, // 수업 날짜
+        images: [
+          {
+            url: ogImage,
+            width: 1200,
+            height: 630,
+            alt: session.title,
+          },
+        ],
+      },
+
+      // Twitter Card 메타데이터
+      twitter: {
+        card: 'summary_large_image',
+        title: session.title,
+        description: `${session.date} 운동 수업 - ${session.sequence}회차`,
+        images: [ogImage],
+      },
     };
   } catch {
     return {

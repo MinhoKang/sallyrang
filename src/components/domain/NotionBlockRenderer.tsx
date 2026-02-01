@@ -153,6 +153,12 @@ export function NotionBlockRenderer({ blocks }: NotionBlockRendererProps) {
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+                    // 첫 번째 이미지는 우선 로딩 (LCP 개선)
+                    priority={blockIndex === 0}
+                    loading={blockIndex === 0 ? undefined : "lazy"}
+                    // 블러 플레이스홀더 (UX 개선)
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
                   />
                 </div>
                 {block.caption && (
