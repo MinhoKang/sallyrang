@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/characters/sally-removebg-preview.png',
+        url: '/images/sally-removebg-preview.svg',
         width: 1200,
         height: 630,
         alt: '샐리랑',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: '샐리랑',
     description: '샐리와 함께하는 우당탕탕 운동 여정',
-    images: ['/images/characters/sally-removebg-preview.png'],
+    images: ['/images/sally-removebg-preview.svg'],
   },
 };
 
