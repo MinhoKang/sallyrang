@@ -9,22 +9,22 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
   ),
 
-  title: '샐리랑 - 운동 기록 서비스',
+  title: '샐리랑',
   description: '샐리와 함께하는 우당탕탕 운동 여정',
 
   // Open Graph 메타데이터
   openGraph: {
-    title: '샐리랑 - 운동 기록 서비스',
+    title: '샐리랑',
     description: '샐리와 함께하는 우당탕탕 운동 여정',
     siteName: '샐리랑',
     locale: 'ko_KR',
     type: 'website',
     images: [
       {
-        url: '/og-image.svg',
+        url: '/images/characters/sally-removebg-preview.png',
         width: 1200,
         height: 630,
-        alt: '샐리랑 - PT 운동 기록 서비스',
+        alt: '샐리랑',
       },
     ],
   },
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   // Twitter Card 메타데이터
   twitter: {
     card: 'summary_large_image',
-    title: '샐리랑 - 운동 기록 서비스',
+    title: '샐리랑',
     description: '샐리와 함께하는 우당탕탕 운동 여정',
-    images: ['/og-image.svg'],
+    images: ['/images/characters/sally-removebg-preview.png'],
   },
 };
 
